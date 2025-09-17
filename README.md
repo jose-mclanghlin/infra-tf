@@ -1,15 +1,15 @@
-## Uso
-- Inicializar entorno de desarrollo:
+## Usage
+- Initialize development environment:
   ```sh
   ./scripts/init.sh development
   ```
 
-- Aplicar cambios en staging:
+- Apply changes in staging:
   ```sh
   ./scripts/apply.sh staging
   ```
 
-- Destruir recursos en producción:
+- Destroy resources in production:
   ```sh
   ./scripts/destroy.sh production
   ```
