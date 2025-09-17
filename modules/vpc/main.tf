@@ -22,7 +22,7 @@ resource "aws_internet_gateway" "this" {
 }
 
 # aws_subnet.public
-# Crea subnets públicas dentro de la VPC.
+# Crea dos subnets públicas dentro de la VPC.
 # Cada subnet representa un rango de direcciones IP dentro del bloque CIDR de la VPC, asociada a una zona de disponibilidad específica.
 # Al habilitar map_public_ip_on_launch, las instancias lanzadas aquí recibirán una IP pública automáticamente, permitiendo acceso directo a/desde Internet (si la tabla de ruteo lo permite).
 resource "aws_subnet" "public" {
@@ -37,16 +37,17 @@ resource "aws_subnet" "public" {
 }
 
 # aws_subnet.private
-# Crea subnets privadas dentro de la VPC.
+# Crea dos subnets privadas dentro de la VPC.
 # Estas subnets no asignan IPs públicas automáticamente a las instancias lanzadas, y normalmente no tienen acceso directo a Internet.
 # Son ideales para recursos internos (bases de datos, servidores backend, etc.).
 resource "aws_subnet" "private" {
-  count             = length(var.private_subnets_cidr)
-  vpc_id            = aws_vpc.this.id
-  cidr_block        = var.private_subnets_cidr[count.index]
-  availability_zone = element(var.azs, count.index)
+  count             = length(var.private_subnets_cidr) // Número de subnets privadas a crear
+  vpc_id            = aws_vpc.this.id               // ID de la VPC donde se crearán las subnets
+  cidr_block        = var.private_subnets_cidr[count.index] // Bloque CIDR específico para cada subnet privada
+  availability_zone = element(var.azs, count.index) // Asigna una zona de disponibilidad basada en el índice, dame el elemento de las lista en la posición count.index
+  map_public_ip_on_launch = false // No asigna IP pública automáticamente a las instancias
   tags = {
-    Name = "${var.name}-private-${count.index + 1}"
+    Name = "${var.name}-private-${count.index + 1}" // Nombre amigable para la subnet
   }
 }
 
