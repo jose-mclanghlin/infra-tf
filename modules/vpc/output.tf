@@ -1,38 +1,41 @@
-# ID de la VPC creada
+# VPC ID
 output "vpc_id" {
-  description = "ID de la VPC"
+  description = "ID of the VPC"
   value       = aws_vpc.this.id
 }
 
-# IDs de las subnets públicas
+# Public subnet IDs
 output "public_subnet_ids" {
-  description = "IDs de las subnets públicas"
+  description = "IDs of the public subnets"
   value       = [for subnet in aws_subnet.public : subnet.id]
 }
 
-# IDs de las subnets privadas
+# Private subnet IDs
 output "private_subnet_ids" {
-  description = "IDs de las subnets privadas"
+  description = "IDs of the private subnets"
   value       = [for subnet in aws_subnet.private : subnet.id]
 }
 
-# ID del Internet Gateway
+# Internet Gateway ID
 output "internet_gateway_id" {
-  description = "ID del Internet Gateway"
+  description = "ID of the Internet Gateway"
   value       = aws_internet_gateway.this.id
 }
 
+# NAT Gateway ID
 output "nat_gateway_id" {
-  description = "ID del NAT Gateway"
+  description = "ID of the NAT Gateway"
   value       = aws_nat_gateway.this.id
 }
 
+# NAT Gateway's Elastic IP
 output "nat_eip" {
-  description = "Elastic IP pública asociada al NAT Gateway"
+  description = "Public Elastic IP associated with the NAT Gateway"
   value       = aws_eip.nat.public_ip
 }
 
+# Private route table ID
 output "private_route_table_id" {
-  description = "ID de la tabla de ruteo privada"
+  description = "ID of the private route table"
   value       = aws_route_table.private.id
 }
