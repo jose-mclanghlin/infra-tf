@@ -1,3 +1,7 @@
+# aws_vpc.this
+# Crea una Virtual Private Cloud (VPC) que es una red virtual dedicada a tu cuenta de AWS.
+# Sirve como el “contenedor” de todos los recursos de red (subnets, gateways, etc.).
+# Habilita soporte y hostnames DNS para permitir resolución interna de nombres y acceso a servicios AWS por nombre.
 resource "aws_vpc" "this" {
   cidr_block           = var.cidr_block
   enable_dns_support   = true
@@ -7,6 +11,9 @@ resource "aws_vpc" "this" {
   }
 }
 
+# aws_internet_gateway.this
+# Crea un Internet Gateway, que es un componente que permite que los recursos dentro de la VPC (por ejemplo, instancias EC2 en subnets públicas) tengan acceso a Internet.
+# El IGW se asocia a la VPC y es indispensable para la comunicación entrante/saliente entre la VPC y el exterior.
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
   tags = {
@@ -14,17 +21,25 @@ resource "aws_internet_gateway" "this" {
   }
 }
 
+# aws_subnet.public
+# Crea subnets públicas dentro de la VPC.
+# Cada subnet representa un rango de direcciones IP dentro del bloque CIDR de la VPC, asociada a una zona de disponibilidad específica.
+# Al habilitar map_public_ip_on_launch, las instancias lanzadas aquí recibirán una IP pública automáticamente, permitiendo acceso directo a/desde Internet (si la tabla de ruteo lo permite).
 resource "aws_subnet" "public" {
   count                   = length(var.public_subnets_cidr)
   vpc_id                  = aws_vpc.this.id
   cidr_block              = var.public_subnets_cidr[count.index]
   availability_zone       = element(var.azs, count.index)
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = true # Asigna IP pública automáticamente a las instancias
   tags = {
     Name = "${var.name}-public-${count.index + 1}"
   }
 }
 
+# aws_subnet.private
+# Crea subnets privadas dentro de la VPC.
+# Estas subnets no asignan IPs públicas automáticamente a las instancias lanzadas, y normalmente no tienen acceso directo a Internet.
+# Son ideales para recursos internos (bases de datos, servidores backend, etc.).
 resource "aws_subnet" "private" {
   count             = length(var.private_subnets_cidr)
   vpc_id            = aws_vpc.this.id
@@ -35,6 +50,9 @@ resource "aws_subnet" "private" {
   }
 }
 
+# aws_route_table.public
+# Crea una tabla de ruteo que define cómo el tráfico se dirige dentro de la VPC.
+# Esta tabla será usada por las subnets públicas para asegurar que el tráfico destinado fuera de la VPC se dirija al Internet Gateway.
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.this.id
   tags = {
@@ -42,12 +60,18 @@ resource "aws_route_table" "public" {
   }
 }
 
+# aws_route.public_internet_access
+# Agrega una ruta en la tabla de ruteo pública para que todo el tráfico cuyo destino sea fuera de la VPC (0.0.0.0/0) se envíe al Internet Gateway.
+# Es lo que realmente permite que las subnets públicas tengan acceso a Internet.
 resource "aws_route" "public_internet_access" {
   route_table_id         = aws_route_table.public.id
-  destination_cidr_block = "0.0.0.0/0"
+  destination_cidr_block = "0.0.0.0/0" # Todo el tráfico IPv4
   gateway_id             = aws_internet_gateway.this.id
 }
 
+# aws_route_table_association.public
+# Asocia cada subnet pública a la tabla de ruteo pública.
+# Esto vincula explícitamente la subnet con la ruta de salida a Internet (a través del IGW).
 resource "aws_route_table_association" "public" {
   count          = length(aws_subnet.public)
   subnet_id      = aws_subnet.public[count.index].id
