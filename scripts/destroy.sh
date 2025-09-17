@@ -1,14 +1,14 @@
 #!/bin/bash
-# Destruye recursos Terraform en un environment específico
+# Destroys Terraform resources in a specific environment
 
-ENV=$1
+ENV=$1  # development | staging | production
 
 if [ -z "$ENV" ]; then
-  echo "Uso: ./destroy.sh <environment>"
+  echo "Usage: ./destroy.sh <environment>"
   exit 1
 fi
 
 cd ../environments/$ENV || exit
 
-echo "Destruyendo recursos en $ENV"
+echo "Destroying resources in $ENV"
 terraform destroy -auto-approve
