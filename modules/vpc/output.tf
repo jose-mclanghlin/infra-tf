@@ -21,3 +21,18 @@ output "internet_gateway_id" {
   description = "ID del Internet Gateway"
   value       = aws_internet_gateway.this.id
 }
+
+output "nat_gateway_id" {
+  description = "ID del NAT Gateway"
+  value       = aws_nat_gateway.this.id
+}
+
+output "nat_eip" {
+  description = "Elastic IP pública asociada al NAT Gateway"
+  value       = aws_eip.nat.public_ip
+}
+
+output "private_route_table_id" {
+  description = "ID de la tabla de ruteo privada"
+  value       = aws_route_table.private.id
+}

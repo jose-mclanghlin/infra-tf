@@ -77,3 +77,44 @@ resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
+
+# ----------- BLOQUES PARA ACCESO A INTERNET DESDE SUBNETS PRIVADAS -----------
+
+# Elastic IP para el NAT Gateway (necesaria para que el NAT tenga una IP pública)
+resource "aws_eip" "nat" {
+  tags = {
+    Name = "${var.name}-nat-eip"
+  }
+}
+
+# NAT Gateway en la primera subnet pública
+resource "aws_nat_gateway" "this" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.public[0].id
+  tags = {
+    Name = "${var.name}-nat-gw"
+  }
+  depends_on = [aws_internet_gateway.this]
+}
+
+# Tabla de ruteo privada para las subnets privadas
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.this.id
+  tags = {
+    Name = "${var.name}-private-rt"
+  }
+}
+
+# Ruta de salida a Internet en la tabla privada usando el NAT Gateway
+resource "aws_route" "private_internet_access" {
+  route_table_id         = aws_route_table.private.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.this.id
+}
+
+# Asociación de cada subnet privada con la tabla de ruteo privada
+resource "aws_route_table_association" "private" {
+  count          = length(aws_subnet.private)
+  subnet_id      = aws_subnet.private[count.index].id
+  route_table_id = aws_route_table.private.id
+}
