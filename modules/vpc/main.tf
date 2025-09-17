@@ -22,7 +22,7 @@ resource "aws_internet_gateway" "this" {
 }
 
 # aws_subnet.public
-# Crea subnets públicas dentro de la VPC.
+# Crea dos subnets públicas dentro de la VPC.
 # Cada subnet representa un rango de direcciones IP dentro del bloque CIDR de la VPC, asociada a una zona de disponibilidad específica.
 # Al habilitar map_public_ip_on_launch, las instancias lanzadas aquí recibirán una IP pública automáticamente, permitiendo acceso directo a/desde Internet (si la tabla de ruteo lo permite).
 resource "aws_subnet" "public" {
@@ -37,7 +37,7 @@ resource "aws_subnet" "public" {
 }
 
 # aws_subnet.private
-# Crea subnets privadas dentro de la VPC.
+# Crea dos subnets privadas dentro de la VPC.
 # Estas subnets no asignan IPs públicas automáticamente a las instancias lanzadas, y normalmente no tienen acceso directo a Internet.
 # Son ideales para recursos internos (bases de datos, servidores backend, etc.).
 resource "aws_subnet" "private" {
