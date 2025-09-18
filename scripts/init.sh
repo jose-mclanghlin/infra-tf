@@ -1,7 +1,7 @@
 #!/bin/bash
 # Initializes Terraform for a specific environment
 
-ENV=$1  # development | staging | production
+ENV=$1  # development | qa | staging | production
 
 if [ -z "$ENV" ]; then
   echo "Usage: ./init.sh <environment>"
