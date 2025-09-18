@@ -9,10 +9,10 @@ module "vpc" {
 
 module "ec2" {
   source = "../../modules/ec2"
-  # ...variables específicas del módulo EC2
+  # ...specific variables of the EC2 module
 }
 
 module "rds" {
   source = "../../modules/rds"
-  # ...variables específicas del módulo RDS
+  # ...specific variables of the RDS module
 }
