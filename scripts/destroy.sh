@@ -1,7 +1,7 @@
 #!/bin/bash
 # Destroys Terraform resources in a specific environment
 
-ENV=$1  # development | staging | production
+ENV=$1  # development | qa | staging | production
 
 if [ -z "$ENV" ]; then
   echo "Usage: ./destroy.sh <environment>"

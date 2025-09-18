@@ -1,7 +1,7 @@
 #!/bin/bash
 # Applies Terraform for a specific environment (apply only)
 
-ENV=$1  # development | staging | production
+ENV=$1  # development | qa | staging | production
 
 if [ -z "$ENV" ]; then
   echo "Usage: ./apply.sh <environment>"
