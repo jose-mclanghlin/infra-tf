@@ -6,13 +6,3 @@ module "vpc" {
   private_subnets_cidr  = var.private_subnets_cidr
   azs                   = var.azs
 }
-
-module "ec2" {
-  source = "../../modules/ec2"
-   # ...specific variables of the ec2 module
-}
-
-module "rds" {
-  source = "../../modules/rds"
- 
-}
