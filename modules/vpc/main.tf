@@ -7,6 +7,7 @@ resource "aws_vpc" "this" {
   }
 }
 
+# This allows communication between the VPC and the internet
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
   tags = {
