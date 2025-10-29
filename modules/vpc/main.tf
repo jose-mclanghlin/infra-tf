@@ -67,9 +67,10 @@ resource "aws_eip" "nat" {
   }
 }
 
+// This allows outbound internet access for private subnets
 resource "aws_nat_gateway" "this" {
   allocation_id = aws_eip.nat.id
-  subnet_id     = values(aws_subnet.public)[0].id
+  subnet_id     = values(aws_subnet.public)[0].id 
   tags = {
     Name = "${var.name}-nat-gw"
   }
