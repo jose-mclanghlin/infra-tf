@@ -39,7 +39,7 @@ resource "aws_subnet" "private" {
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.this.id
   tags = {
-    Name = "${var.name}-public-rt"
+    Name = "${var.name}-rt-public"
   }
 }
 
