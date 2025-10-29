@@ -7,13 +7,6 @@ resource "aws_vpc" "this" {
   }
 }
 
-resource "aws_internet_gateway" "this" {
-  vpc_id = aws_vpc.this.id
-  tags = {
-    Name = "${var.name}-igw"
-  }
-}
-
 resource "aws_subnet" "public" {
   count                   = length(var.public_subnets_cidr)
   vpc_id                  = aws_vpc.this.id
@@ -33,6 +26,13 @@ resource "aws_subnet" "private" {
   map_public_ip_on_launch = false 
   tags = {
     Name = "${var.name}-private-${count.index + 1}"
+  }
+}
+
+resource "aws_internet_gateway" "this" {
+  vpc_id = aws_vpc.this.id
+  tags = {
+    Name = "${var.name}-igw"
   }
 }
 
