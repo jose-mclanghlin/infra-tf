@@ -17,7 +17,7 @@ resource "aws_internet_gateway" "this" {
 }
 
 resource "aws_subnet" "public" {
-  for_each                = { for idx, cidr in var.public_subnets_cidr : idx => cidr }
+  for_each                = { for idx, cidr in var.public_subnets_cidr : idx => cidr } // Iterate over public subnet CIDRs
   vpc_id                  = aws_vpc.this.id
   cidr_block              = each.value
   availability_zone       = var.azs[each.key]
