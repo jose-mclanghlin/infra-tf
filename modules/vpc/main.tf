@@ -60,6 +60,7 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
+# Private route table and NAT gateway for private subnets
 resource "aws_eip" "nat" {
   tags = {
     Name = "${var.name}-nat-eip"
