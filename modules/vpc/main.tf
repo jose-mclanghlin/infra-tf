@@ -1,10 +1,10 @@
 // See more: https://medium.com/@sanoj.sudo/how-to-create-aws-vpc-788dc3c4193b
 resource "aws_vpc" "this" {
-  cidr_block           = var.cidr_block
+  cidr_block           = var.vpc_config.cidr_block
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
-    Name = var.name
+    Name = var.vpc_config.name
   }
 }
 
@@ -12,29 +12,29 @@ resource "aws_vpc" "this" {
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
   tags = {
-    Name = "${var.name}-igw"
+    Name = "${var.vpc_config.name}-igw"
   }
 }
 
 resource "aws_subnet" "public" {
-  for_each                = { for idx, cidr in var.public_subnets_cidr : idx => cidr } // Iterate over public subnet CIDRs
+  for_each                = { for idx, cidr in var.vpc_config.public_subnets_cidr : idx => cidr } // Iterate over public subnet CIDRs
   vpc_id                  = aws_vpc.this.id
   cidr_block              = each.value
-  availability_zone       = var.azs[each.key]
+  availability_zone       = var.vpc_config.azs[each.key]
   map_public_ip_on_launch = true
   tags = {
-    Name = "${var.name}-public-${each.key + 1}"
+    Name = "${var.vpc_config.name}-public-${each.key + 1}"
   }
 }
 
 resource "aws_subnet" "private" {
-  for_each          = { for idx, cidr in var.private_subnets_cidr : idx => cidr }
+  for_each          = { for idx, cidr in var.vpc_config.private_subnets_cidr : idx => cidr }
   vpc_id            = aws_vpc.this.id              
   cidr_block        = each.value
-  availability_zone = var.azs[each.key]
+  availability_zone = var.vpc_config.azs[each.key]
   map_public_ip_on_launch = false 
   tags = {
-    Name = "${var.name}-private-${each.key + 1}"
+    Name = "${var.vpc_config.name}-private-${each.key + 1}"
   }
 }
 
@@ -42,7 +42,7 @@ resource "aws_subnet" "private" {
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.this.id
   tags = {
-    Name = "${var.name}-rt-public"
+    Name = "${var.vpc_config.name}-rt-public"
   }
 }
 
@@ -63,7 +63,7 @@ resource "aws_route_table_association" "public" {
 # Private route table and NAT gateway for private subnets
 resource "aws_eip" "nat" {
   tags = {
-    Name = "${var.name}-nat-eip"
+    Name = "${var.vpc_config.name}-nat-eip"
   }
 }
 
@@ -72,7 +72,7 @@ resource "aws_nat_gateway" "this" {
   allocation_id = aws_eip.nat.id
   subnet_id     = values(aws_subnet.public)[0].id 
   tags = {
-    Name = "${var.name}-nat-gw"
+    Name = "${var.vpc_config.name}-nat-gw"
   }
   depends_on = [aws_internet_gateway.this]
 }
@@ -80,7 +80,7 @@ resource "aws_nat_gateway" "this" {
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.this.id
   tags = {
-    Name = "${var.name}-private-rt"
+    Name = "${var.vpc_config.name}-private-rt"
   }
 }
 
