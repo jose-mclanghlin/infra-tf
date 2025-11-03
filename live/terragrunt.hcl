@@ -1,19 +1,11 @@
-// See more: https://medium.com/devsecops-community/terraform-project-structure-a-step-by-step-guide-for-scalable-infrastructure-1e51e8029849
-// See more: https://docs.aws.amazon.com/prescriptive-guidance/latest/terraform-aws-provider-best-practices/structure.html#repo-structure
-// See more: https://medium.com/@bouachirhamza/structuring-terraform-projects-like-a-pro-modules-workspaces-best-practices-92c3f47df02b
-// See more: https://stackoverflow.com/questions/66024950/how-to-organize-terraform-modules-for-multiple-environments
-// See more: https://medium.com/@gupta.surender.1990/terraform-directory-structure-best-practices-build-for-scale-reuse-and-automation-6a2025cfd855
-// See more: https://medium.com/byte-of-knowledge/understanding-terraform-and-terragrunt-a-detailed-guide-60f46ae32110
-// See more: https://itnext.io/structuring-terraform-project-using-terragrunt-part-i-4c6e936c4858
-// See more: https://spacelift.io/blog/terragrunt
 remote_state {
   backend = "s3"
   config = {
-    bucket         = "plub-use1-terraform-state"
+    bucket         = "plub-use2-terraform-state"
     key            = "${path_relative_to_include()}/terraform.tfstate"
-    region         = "us-east-1"
+    region         = "us-east-2"
     encrypt        = true
-    dynamodb_table = "plub-use1-terraform-lock"
+    dynamodb_table = "plub-use2-terraform-lock"
   }
 }
 
@@ -22,7 +14,16 @@ generate "provider" {
   if_exists = "overwrite"
   contents  = <<EOF
 provider "aws" {
-  region = "us-east-1"
+  region  = try(var.aws_region, "us-east-2")
+  profile = try(var.aws_profile, null)
+
+  max_retries                 = 5
+  skip_requesting_account_id  = false
 }
 EOF
+}
+
+inputs = {
+  aws_region  = "us-east-2"
+  aws_profile = "default"
 }
