@@ -5,6 +5,7 @@
 // See more: https://medium.com/@gupta.surender.1990/terraform-directory-structure-best-practices-build-for-scale-reuse-and-automation-6a2025cfd855
 // See more: https://medium.com/byte-of-knowledge/understanding-terraform-and-terragrunt-a-detailed-guide-60f46ae32110
 // See more: https://itnext.io/structuring-terraform-project-using-terragrunt-part-i-4c6e936c4858
+// See more: https://spacelift.io/blog/terragrunt
 terraform {
   required_version = ">= 1.4.0"
   required_providers {
