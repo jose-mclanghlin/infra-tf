@@ -3,6 +3,7 @@
 // See more: https://medium.com/@bouachirhamza/structuring-terraform-projects-like-a-pro-modules-workspaces-best-practices-92c3f47df02b
 // See more: https://stackoverflow.com/questions/66024950/how-to-organize-terraform-modules-for-multiple-environments
 // See more: https://medium.com/@gupta.surender.1990/terraform-directory-structure-best-practices-build-for-scale-reuse-and-automation-6a2025cfd855
+// See more: https://medium.com/byte-of-knowledge/understanding-terraform-and-terragrunt-a-detailed-guide-60f46ae32110
 terraform {
   required_version = ">= 1.4.0"
   required_providers {
