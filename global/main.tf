@@ -5,6 +5,5 @@ module "s3_backend" {
 
 module "dynamodb_table" {
   source              = "./dynamodb"
-  environment         = "dev"
   dynamodb_table_name = "plub-use1-terraform-locks"
 }

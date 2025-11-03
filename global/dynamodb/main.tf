@@ -8,7 +8,6 @@ resource "aws_dynamodb_table" "this" {
   }
   
   tags = {
-    Name        = var.dynamodb_table_name
-    Environment = "global"
+    Name = var.dynamodb_table_name
   }
 }
