@@ -6,3 +6,23 @@
 // See more: https://medium.com/byte-of-knowledge/understanding-terraform-and-terragrunt-a-detailed-guide-60f46ae32110
 // See more: https://itnext.io/structuring-terraform-project-using-terragrunt-part-i-4c6e936c4858
 // See more: https://spacelift.io/blog/terragrunt
+remote_state {
+  backend = "s3"
+  config = {
+    bucket         = "plub-use1-terraform-state"
+    key            = "${path_relative_to_include()}/terraform.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
+    dynamodb_table = "plub-use1-terraform-lock"
+  }
+}
+
+generate "provider" {
+  path      = "provider.tf"
+  if_exists = "overwrite"
+  contents  = <<EOF
+provider "aws" {
+  region = "us-east-1"
+}
+EOF
+}
