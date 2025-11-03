@@ -16,7 +16,6 @@ generate "provider" {
 provider "aws" {
   region  = try(var.aws_region, "us-east-2")
   profile = try(var.aws_profile, null)
-
   max_retries                 = 5
   skip_requesting_account_id  = false
 }
