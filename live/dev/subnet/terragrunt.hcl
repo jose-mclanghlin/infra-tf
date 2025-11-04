@@ -8,6 +8,7 @@ terraform {
 
 dependency "vpc" {
   config_path = "../vpc"
+
   mock_outputs = {
     vpc_id              = "vpc-fake-id"
     internet_gateway_id = "igw-fake-id"
@@ -17,7 +18,7 @@ dependency "vpc" {
 inputs = {
   vpc_id      = dependency.vpc.outputs.vpc_id
   name_prefix = "dev"
-  
+
   # Public subnets configuration
   public_subnets = [
     {
@@ -39,7 +40,7 @@ inputs = {
       }
     }
   ]
-  
+
   # Private subnets configuration
   private_subnets = [
     {
@@ -59,7 +60,7 @@ inputs = {
       }
     }
   ]
-  
+
   # Database subnets configuration (optional)
   database_subnets = [
     {
@@ -79,23 +80,23 @@ inputs = {
       }
     }
   ]
-  
+
   # Internet Gateway from VPC module
   internet_gateway_id = dependency.vpc.outputs.internet_gateway_id
-  
+
   # Route table options
-  create_public_route_table    = true
-  create_private_route_table   = true
-  create_database_route_table  = true
-  
+  create_public_route_table   = true
+  create_private_route_table  = true
+  create_database_route_table = true
+
   # NAT Gateway options
-  create_nat_gateway    = true
-  single_nat_gateway    = false  # One NAT Gateway per AZ for high availability
-  
+  create_nat_gateway = true
+  single_nat_gateway = false # One NAT Gateway per AZ for high availability
+
   # Database subnet group
   create_database_subnet_group = true
   database_subnet_group_name   = "dev-db-subnet-group"
-  
+
   tags = {
     Environment = "dev"
     Project     = "infra-tf"
