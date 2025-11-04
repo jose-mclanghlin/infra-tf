@@ -8,7 +8,6 @@ terraform {
 
 dependency "vpc" {
   config_path = "../vpc"
-
   mock_outputs = {
     vpc_id              = "vpc-fake-id"
     internet_gateway_id = "igw-fake-id"
@@ -18,8 +17,7 @@ dependency "vpc" {
 inputs = {
   vpc_id      = dependency.vpc.outputs.vpc_id
   name_prefix = "dev"
-
-  # Public subnets configuration
+  
   public_subnets = [
     {
       cidr_block              = "10.0.1.0/24"
