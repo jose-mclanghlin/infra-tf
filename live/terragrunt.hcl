@@ -21,13 +21,13 @@ generate "provider" {
   if_exists = "overwrite"
 
   contents = <<EOF
-provider "aws" {
-  region  = try(var.aws_region, "us-east-1")
-  profile = try(var.aws_profile, null)
-  max_retries                = 5
-  skip_requesting_account_id = false
-}
-EOF
+    provider "aws" {
+      region  = try(var.aws_region, "us-east-1")
+      profile = try(var.aws_profile, null)
+      max_retries                = 5
+      skip_requesting_account_id = false
+    }
+    EOF
 }
 
 inputs = {
