@@ -1,0 +1,53 @@
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfplan.*
+.terraform/
+.terraform.lock.hcl
+
+# Terragrunt
+.terragrunt-cache/
+.terragrunt.hcl.backup
+
+# Variable files (pueden contener secretos)
+*.tfvars
+*.tfvars.json
+!example.tfvars
+!terraform.tfvars.example
+
+# Logs
+crash.log
+crash.*.log
+terraform.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backup files
+*.backup
+*.bak
+
+# AWS
+.aws/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Certificate files
+*.pem
+*.key
+*.crt
+
+# Compressed files
+*.tar.gz
+*.zip
