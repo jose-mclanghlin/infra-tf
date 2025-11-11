@@ -7,6 +7,10 @@ remote_state {
     encrypt        = true
     dynamodb_table = "plub-use2-terraform-lock"
   }
+  generate = {
+    path      = "backend.tf"
+    if_exists = "overwrite_terragrunt"
+  }
 }
 
 generate "provider" {
