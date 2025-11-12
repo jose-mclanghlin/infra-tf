@@ -30,7 +30,7 @@ resource "aws_route" "public_internet" {
   gateway_id             = var.internet_gateway_id
 }
 
-# Asociar subnets públicas con route table
+# Asociar subnets publicas con route table
 resource "aws_route_table_association" "public" {
   for_each = aws_subnet.public
   
