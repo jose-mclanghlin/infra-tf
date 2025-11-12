@@ -1,5 +1,3 @@
-# See more: https://medium.com/@sanoj.sudo/how-to-create-aws-vpc-788dc3c4193b
-
 # Create public subnets
 resource "aws_subnet" "public" {
   for_each                = { for idx, cidr in var.subnet_config.public_subnets_cidr : idx => cidr }
