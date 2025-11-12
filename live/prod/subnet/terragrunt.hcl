@@ -24,18 +24,19 @@ inputs = {
   internet_gateway_id = dependency.vpc.outputs.internet_gateway_id
   
   subnet_config = {
-    name                   = "dev-network"
-    public_subnets_cidr   = ["10.0.1.0/24", "10.0.2.0/24"]
-    private_subnets_cidr  = ["10.0.10.0/24", "10.0.11.0/24"]
-    azs                   = ["us-west-2a", "us-west-2b"]
+    name                   = "prod-network"
+    public_subnets_cidr   = ["10.1.1.0/24", "10.1.2.0/24", "10.1.3.0/24"]
+    private_subnets_cidr  = ["10.1.10.0/24", "10.1.11.0/24", "10.1.12.0/24"]
+    azs                   = ["us-west-2a", "us-west-2b", "us-west-2c"]
   }
   
   enable_nat_gateway = true
   
   tags = {
-    Environment = "dev"
+    Environment = "prod"
     Project     = "my-project"
     ManagedBy   = "terraform"
     Module      = "subnet"
+    CostCenter  = "production"
   }
 }
