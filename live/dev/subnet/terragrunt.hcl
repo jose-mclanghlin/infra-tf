@@ -22,15 +22,9 @@ dependency "vpc" {
 inputs = {
   vpc_id              = dependency.vpc.outputs.vpc_id
   internet_gateway_id = dependency.vpc.outputs.internet_gateway_id
-  
-  subnet_config = {
-    name                   = "dev-network"
-    public_subnets_cidr   = ["10.0.1.0/24", "10.0.2.0/24"]
-    private_subnets_cidr  = ["10.0.10.0/24", "10.0.11.0/24"]
-    azs                   = ["us-west-2a", "us-west-2b"]
-  }
-  
-  enable_nat_gateway = true
+  public_subnets_cidr = ["10.0.1.0/24", "10.0.2.0/24"]
+  availability_zone   = "us-east-1a"
+  name_prefix         = "dev"
   
   tags = {
     Environment = "dev"
