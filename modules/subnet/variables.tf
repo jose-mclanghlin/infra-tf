@@ -4,6 +4,11 @@ variable "vpc_id" {
   type        = string
 }
 
+variable "internet_gateway_id" {
+  description = "ID of the Internet Gateway for public subnets"
+  type        = string
+}
+
 variable "subnet_config" {
   description = "Configuration for subnet creation"
   type = object({
@@ -22,11 +27,6 @@ variable "subnet_config" {
     condition = length(var.subnet_config.private_subnets_cidr) <= length(var.subnet_config.azs)
     error_message = "Number of private subnets cannot exceed number of availability zones."
   }
-}
-
-variable "internet_gateway_id" {
-  description = "ID of the Internet Gateway for public subnets"
-  type        = string
 }
 
 # Optional Variables
