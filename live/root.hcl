@@ -22,8 +22,7 @@ generate "provider" {
 
   contents = <<EOF
     provider "aws" {
-      region  = try(var.aws_region, "us-east-1")
-      profile = try(var.aws_profile, null)
+      region                     = "us-east-1"
       max_retries                = 5
       skip_requesting_account_id = false
     }
@@ -31,6 +30,5 @@ generate "provider" {
 }
 
 inputs = {
-  aws_region  = "us-east-1"
-  aws_profile = "default"
+  # Global inputs can be added here if needed
 }
