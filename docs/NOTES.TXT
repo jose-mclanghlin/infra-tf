@@ -2,7 +2,6 @@ See more: https://medium.com/@sanoj.sudo/how-to-create-aws-vpc-788dc3c4193b
 See more: https://www.youtube.com/watch?v=HIcCKT-eTKM&t=1695s
 
 # Steps to deploy infrastructure:
-cd "c:\Users\mclan\Desktop\DEPLOYMENT\infra-tf\live\dev"
 terragrunt run-all init
 terragrunt run-all plan
 terragrunt run-all apply
