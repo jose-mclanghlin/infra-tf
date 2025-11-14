@@ -36,8 +36,8 @@ inputs = {
   
   tags = {
     Environment = "dev"
-    Project     = "my-project"
-    ManagedBy   = "terraform"
+    Project     = "infra-tf"
+    ManagedBy   = "terragrunt"
     Module      = "subnet"
   }
 }
