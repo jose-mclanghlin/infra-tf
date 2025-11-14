@@ -1,16 +1,29 @@
+locals {
+  public_subnets = flatten([
+    for idx, cidr in var.public_subnets_cidr : [
+      for az in var.availability_zones : {
+        az   = az
+        cidr = cidr
+        name = "${var.name_prefix}-public-${az}-${idx + 1}"
+      }
+    ]
+  ])
+}
+
 resource "aws_subnet" "public" {
-  for_each = { for idx, cidr in var.public_subnets_cidr : idx => cidr }
-  
+  for_each = { for s in local.public_subnets : s.name => s }
+
   vpc_id                  = var.vpc_id
-  cidr_block              = each.value
-  availability_zone       = var.availability_zone
+  cidr_block              = each.value.cidr
+  availability_zone       = each.value.az
   map_public_ip_on_launch = true
-  
+
   tags = merge(var.tags, {
-    Name = "${var.name_prefix}-public-${each.key + 1}"
+    Name = each.value.name
     Type = "Public"
   })
 }
+
 
 resource "aws_route_table" "public" {
   vpc_id = var.vpc_id

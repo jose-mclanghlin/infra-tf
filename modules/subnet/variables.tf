@@ -15,10 +15,10 @@ variable "public_subnets_cidr" {
   default     = []
 }
 
-variable "availability_zone" {
-  description = "Availability zone única para todas las subnets"
-  type        = string
-  default     = "us-east-1a"
+variable "availability_zones" {
+  description = "Lista de Availability Zones donde crear subnets públicas"
+  type        = list(string)
+  default     = ["us-east-1a", "us-east-1b"]
 }
 
 variable "name_prefix" {
