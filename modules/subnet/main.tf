@@ -1,13 +1,11 @@
 locals {
-  public_subnets = flatten([
-    for idx, cidr in var.public_subnets_cidr : [
-      for az in var.availability_zones : {
-        az   = az
-        cidr = cidr
-        name = "${var.name_prefix}-public-${az}-${idx + 1}"
-      }
-    ]
-  ])
+  public_subnets = [
+    for idx, cidr in var.public_subnets_cidr : {
+      az   = var.availability_zones[idx % length(var.availability_zones)]
+      cidr = cidr
+      name = "${var.name_prefix}-public-${var.availability_zones[idx % length(var.availability_zones)]}-${idx + 1}"
+    }
+  ]
 }
 
 resource "aws_subnet" "public" {
