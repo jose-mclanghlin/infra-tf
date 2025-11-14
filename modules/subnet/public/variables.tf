@@ -1,41 +1,41 @@
 # Basic variables for public subnets
 variable "vpc_id" {
-  description = "ID de la VPC donde crear las subnets"
+  description = "ID of the VPC where the subnets will be created"
   type        = string
 }
 
 variable "internet_gateway_id" {
-  description = "ID del Internet Gateway"
+  description = "ID of the Internet Gateway"
   type        = string
 }
 
 variable "public_subnets_cidr" {
-  description = "Lista de CIDRs para subnets públicas"
+  description = "List of CIDR blocks for public subnets"
   type        = list(string)
   default     = []
 }
 
 variable "availability_zones" {
-  description = "Lista de Availability Zones donde crear subnets públicas"
+  description = "List of Availability Zones where public subnets will be created"
   type        = list(string)
   default     = ["us-east-1a", "us-east-1b"]
 }
 
 variable "name_prefix" {
-  description = "Prefijo para nombres de recursos"
+  description = "Prefix used for naming resources"
   type        = string
   default     = "public"
 }
 
 variable "tags" {
-  description = "Tags para los recursos"
+  description = "Tags to apply to all resources"
   type        = map(string)
   default     = {}
 }
 
 # Enable/disable NACL
 variable "enable_nacl" {
-  description = "Habilitar Network ACL personalizado para subnets públicas"
+  description = "Enable custom Network ACL for public subnets"
   type        = bool
   default     = true
 }
