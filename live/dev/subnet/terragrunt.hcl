@@ -26,6 +26,14 @@ inputs = {
   availability_zone   = "us-east-1a"
   name_prefix         = "dev"
   
+  # Network ACL Configuration
+  enable_nacl                     = true
+  public_nacl_cidr               = "0.0.0.0/0"
+  public_nacl_inbound_ports      = [80, 443, 22]  # HTTP, HTTPS, SSH
+  public_nacl_inbound_ephemeral  = true
+  public_nacl_outbound_ports     = [80, 443, 53]  # HTTP, HTTPS, DNS
+  public_nacl_outbound_ephemeral = true
+  
   tags = {
     Environment = "dev"
     Project     = "my-project"

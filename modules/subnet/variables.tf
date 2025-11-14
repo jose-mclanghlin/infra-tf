@@ -33,6 +33,13 @@ variable "tags" {
   default     = {}
 }
 
+# Enable/disable NACL
+variable "enable_nacl" {
+  description = "Habilitar Network ACL personalizado para subnets públicas"
+  type        = bool
+  default     = true
+}
+
 # CIDR allowed for inbound/outbound traffic (defaults to entire Internet)
 variable "public_nacl_cidr" {
   description = "CIDR allowed for inbound and outbound traffic on the public NACL"
