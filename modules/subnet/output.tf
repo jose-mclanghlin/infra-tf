@@ -114,7 +114,8 @@ output "private_nacl_enabled" {
 output "private_subnets_by_az" {
   description = "Map of availability zones to private subnet IDs"
   value = var.create_private_subnets ? {
-    for subnet in values(aws_subnet.private) : subnet.availability_zone => subnet.id
+    for az in distinct([for subnet in values(aws_subnet.private) : subnet.availability_zone]) :
+    az => [for subnet in values(aws_subnet.private) : subnet.id if subnet.availability_zone == az]
   } : {}
 }
 

@@ -179,12 +179,12 @@ resource "aws_nat_gateway" "private" {
 
 # Create route tables for private subnets
 resource "aws_route_table" "private" {
-  for_each = var.create_private_subnets ? (var.enable_nat_gateway ? aws_subnet.private : { "isolated" = { name = "isolated", az = "isolated" } }) : {}
+  for_each = var.create_private_subnets ? aws_subnet.private : {}
 
   vpc_id = var.vpc_id
 
   tags = merge(var.tags, {
-    Name = var.enable_nat_gateway ? "${var.name_prefix}-rt-private-${replace(each.key, "${var.name_prefix}-private-", "")}" : "${var.name_prefix}-rt-isolated"
+    Name = var.enable_nat_gateway ? "${var.name_prefix}-rt-private-${replace(each.key, "${var.name_prefix}-private-", "")}" : "${var.name_prefix}-rt-isolated-${replace(each.key, "${var.name_prefix}-private-", "")}"
     Type = var.enable_nat_gateway ? "Private with NAT" : "Isolated"
   })
 }
@@ -217,7 +217,7 @@ resource "aws_route_table_association" "private" {
   for_each = var.create_private_subnets ? aws_subnet.private : {}
 
   subnet_id      = each.value.id
-  route_table_id = var.enable_nat_gateway ? aws_route_table.private[each.key].id : aws_route_table.private["isolated"].id
+  route_table_id = aws_route_table.private[each.key].id
 }
 
 # Network ACL for private subnets
