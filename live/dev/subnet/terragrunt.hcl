@@ -22,8 +22,8 @@ dependency "vpc" {
 inputs = {
   vpc_id              = dependency.vpc.outputs.vpc_id
   internet_gateway_id = dependency.vpc.outputs.internet_gateway_id
-  public_subnets_cidr = ["10.0.10.0/24", "10.0.11.0/24", "10.0.12.0/24", "10.0.13.0/24"]  # Nuevo rango de CIDRs
-  availability_zones  = ["us-east-1a", "us-east-1b"]  # Lista de AZs
+  public_subnets_cidr = ["10.0.10.0/24", "10.0.11.0/24", "10.0.12.0/24", "10.0.13.0/24"]
+  availability_zones  = ["us-east-1a", "us-east-1b"]
   name_prefix         = "dev"
   
   # Network ACL Configuration
