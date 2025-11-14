@@ -58,7 +58,7 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
-# Network ACL para subnets públicas
+# Network ACL for public subnets
 resource "aws_network_acl" "public" {
   count  = var.enable_nacl ? 1 : 0
   vpc_id = var.vpc_id
@@ -69,6 +69,7 @@ resource "aws_network_acl" "public" {
   })
 }
 
+# Inbound rules for specific ports in public NACL
 resource "aws_network_acl_rule" "public_inbound_ports" {
   for_each = var.enable_nacl ? toset([for p in var.public_nacl_inbound_ports : tostring(p)]) : []
 
@@ -82,6 +83,7 @@ resource "aws_network_acl_rule" "public_inbound_ports" {
   to_port        = tonumber(each.value)
 }
 
+# Inbound rules for ephemeral ports in public NACL
 resource "aws_network_acl_rule" "public_inbound_ephemeral" {
   count = var.enable_nacl && var.public_nacl_inbound_ephemeral ? 1 : 0
 
@@ -95,6 +97,7 @@ resource "aws_network_acl_rule" "public_inbound_ephemeral" {
   to_port        = 65535
 }
 
+# Outbound rules for specific ports in public NACL
 resource "aws_network_acl_rule" "public_outbound_ports" {
   for_each = var.enable_nacl ? toset([for p in var.public_nacl_outbound_ports : tostring(p)]) : []
 
@@ -108,6 +111,7 @@ resource "aws_network_acl_rule" "public_outbound_ports" {
   to_port        = tonumber(each.value)
 }
 
+# Outbound rules for ephemeral ports in public NACL
 resource "aws_network_acl_rule" "public_outbound_ephemeral" {
   count = var.enable_nacl && var.public_nacl_outbound_ephemeral ? 1 : 0
 
@@ -121,6 +125,7 @@ resource "aws_network_acl_rule" "public_outbound_ephemeral" {
   to_port        = 65535
 }
 
+# Associate public subnets with public NACL
 resource "aws_network_acl_association" "public" {
   for_each = var.enable_nacl ? aws_subnet.public : {}
 
@@ -200,7 +205,7 @@ resource "aws_route" "private_nat_gateway" {
   nat_gateway_id = values(aws_nat_gateway.private)[0].id
 }
 
-# Associate all private subnets with the single private route table
+# Associate all private subnets with the private route table
 resource "aws_route_table_association" "private" {
   for_each = var.create_private_subnets ? aws_subnet.private : {}
 
@@ -219,6 +224,7 @@ resource "aws_network_acl" "private" {
   })
 }
 
+# Inbound rules for specific ports in private NACL
 resource "aws_network_acl_rule" "private_inbound_ports" {
   for_each = var.create_private_subnets && var.enable_private_nacl ? toset([for p in var.private_nacl_inbound_ports : tostring(p)]) : []
 
@@ -232,6 +238,7 @@ resource "aws_network_acl_rule" "private_inbound_ports" {
   to_port        = tonumber(each.value)
 }
 
+# Inbound rules for ephemeral ports in private NACL
 resource "aws_network_acl_rule" "private_inbound_ephemeral" {
   count = var.create_private_subnets && var.enable_private_nacl && var.private_nacl_inbound_ephemeral ? 1 : 0
 
@@ -245,6 +252,7 @@ resource "aws_network_acl_rule" "private_inbound_ephemeral" {
   to_port        = 65535
 }
 
+# Outbound rules for specific ports in private NACL
 resource "aws_network_acl_rule" "private_outbound_ports" {
   for_each = var.create_private_subnets && var.enable_private_nacl ? toset([for p in var.private_nacl_outbound_ports : tostring(p)]) : []
 
@@ -253,11 +261,12 @@ resource "aws_network_acl_rule" "private_outbound_ports" {
   egress         = true
   protocol       = "tcp"
   rule_action    = "allow"
-  cidr_block     = "0.0.0.0/0"  # Allow outbound to internet for updates
+  cidr_block     = "0.0.0.0/0"  # Allow outbound to the internet for updates
   from_port      = tonumber(each.value)
   to_port        = tonumber(each.value)
 }
 
+# Outbound rules for ephemeral ports in private NACL
 resource "aws_network_acl_rule" "private_outbound_ephemeral" {
   count = var.create_private_subnets && var.enable_private_nacl && var.private_nacl_outbound_ephemeral ? 1 : 0
 
@@ -271,6 +280,7 @@ resource "aws_network_acl_rule" "private_outbound_ephemeral" {
   to_port        = 65535
 }
 
+# Associate private subnets with private NACL
 resource "aws_network_acl_association" "private" {
   for_each = var.create_private_subnets && var.enable_private_nacl ? aws_subnet.private : {}
 
