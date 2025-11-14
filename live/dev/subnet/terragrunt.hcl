@@ -7,7 +7,7 @@ include "env" {
 }
 
 terraform {
-  source = "../../../modules/subnet"
+  source = "../../../modules/subnet/public"
 }
 
 dependency "vpc" {
