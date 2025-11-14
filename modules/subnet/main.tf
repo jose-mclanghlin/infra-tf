@@ -133,6 +133,7 @@ resource "aws_network_acl_association" "public" {
   network_acl_id = aws_network_acl.public[0].id
 }
 
+
 # Create private subnets
 resource "aws_subnet" "private" {
   for_each = var.create_private_subnets ? { for s in local.private_subnets : s.name => s } : {}
