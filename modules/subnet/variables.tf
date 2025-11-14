@@ -74,3 +74,67 @@ variable "public_nacl_outbound_ephemeral" {
   type        = bool
   default     = true
 }
+
+# ===== PRIVATE SUBNET VARIABLES =====
+
+variable "private_subnets_cidr" {
+  description = "List of CIDR blocks for private subnets"
+  type        = list(string)
+  default     = []
+}
+
+variable "create_private_subnets" {
+  description = "Whether to create private subnets"
+  type        = bool
+  default     = false
+}
+
+# NAT Gateway configuration
+variable "enable_nat_gateway" {
+  description = "Enable NAT Gateway for private subnets internet access"
+  type        = bool
+  default     = true
+}
+
+variable "single_nat_gateway" {
+  description = "Use a single NAT Gateway for all private subnets (cost optimization)"
+  type        = bool
+  default     = false
+}
+
+# Private NACL configuration
+variable "enable_private_nacl" {
+  description = "Enable custom Network ACL for private subnets"
+  type        = bool
+  default     = true
+}
+
+variable "private_nacl_cidr" {
+  description = "CIDR allowed for inbound and outbound traffic on the private NACL"
+  type        = string
+  default     = "10.0.0.0/16" # Allow traffic within VPC by default
+}
+
+variable "private_nacl_inbound_ports" {
+  description = "Inbound ports allowed on the private NACL (database, app servers, etc.)"
+  type        = list(number)
+  default     = [3306, 5432, 6379] # MySQL, PostgreSQL, Redis
+}
+
+variable "private_nacl_inbound_ephemeral" {
+  description = "Whether to allow inbound ephemeral ports for private subnets"
+  type        = bool
+  default     = true
+}
+
+variable "private_nacl_outbound_ports" {
+  description = "Outbound ports allowed on the private NACL"
+  type        = list(number)
+  default     = [80, 443] # HTTP, HTTPS for package updates
+}
+
+variable "private_nacl_outbound_ephemeral" {
+  description = "Whether to allow outbound ephemeral ports for private subnets"
+  type        = bool
+  default     = true
+}
