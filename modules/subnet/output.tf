@@ -80,7 +80,7 @@ output "private_subnet_azs" {
 
 output "private_route_table_ids" {
   description = "IDs of the private route tables"
-  value       = var.create_private_subnets ? values(aws_route_table.private)[*].id : []
+  value       = var.create_private_subnets ? aws_route_table.private[*].id : []
 }
 
 # NAT Gateway Outputs

@@ -177,47 +177,35 @@ resource "aws_nat_gateway" "private" {
   depends_on = [aws_eip.nat, aws_route.public_internet]
 }
 
-# Create route tables for private subnets
+# Create single route table for all private subnets
 resource "aws_route_table" "private" {
-  for_each = var.create_private_subnets ? aws_subnet.private : {}
-
+  count = var.create_private_subnets ? 1 : 0
+  
   vpc_id = var.vpc_id
 
   tags = merge(var.tags, {
-    Name = var.enable_nat_gateway ? "${var.name_prefix}-rt-private-${replace(each.key, "${var.name_prefix}-private-", "")}" : "${var.name_prefix}-rt-isolated-${replace(each.key, "${var.name_prefix}-private-", "")}"
+    Name = var.enable_nat_gateway ? "${var.name_prefix}-rt-private" : "${var.name_prefix}-rt-isolated"
     Type = var.enable_nat_gateway ? "Private with NAT" : "Isolated"
   })
 }
 
-# Create routes to NAT Gateway (if enabled)
+# Create single route to NAT Gateway for private subnets
 resource "aws_route" "private_nat_gateway" {
-  for_each = var.create_private_subnets && var.enable_nat_gateway ? aws_route_table.private : {}
+  count = var.create_private_subnets && var.enable_nat_gateway ? 1 : 0
 
-  route_table_id         = each.value.id
+  route_table_id         = aws_route_table.private[0].id
   destination_cidr_block = "0.0.0.0/0"
   
-  # Select NAT Gateway based on strategy
-  nat_gateway_id = var.single_nat_gateway ? (
-    # Single NAT Gateway: use the only one available
-    values(aws_nat_gateway.private)[0].id
-  ) : (
-    # Multiple NAT Gateways: distribute by AZ
-    # Extract AZ from private subnet key and find matching NAT Gateway
-    try(
-      [for nat_key, nat in aws_nat_gateway.private : 
-        nat.id if contains(each.key, regex("(us-[a-z]+-[0-9][a-z])", nat_key))
-      ][0],
-      values(aws_nat_gateway.private)[0].id  # fallback to first NAT Gateway
-    )
-  )
+  # Use first NAT Gateway available
+  nat_gateway_id = values(aws_nat_gateway.private)[0].id
 }
 
-# Associate private subnets with route tables
+# Associate all private subnets with the single private route table
 resource "aws_route_table_association" "private" {
   for_each = var.create_private_subnets ? aws_subnet.private : {}
 
   subnet_id      = each.value.id
-  route_table_id = aws_route_table.private[each.key].id
+  route_table_id = aws_route_table.private[0].id
 }
 
 # Network ACL for private subnets
