@@ -2,6 +2,7 @@ See more: https://medium.com/@sanoj.sudo/how-to-create-aws-vpc-788dc3c4193b
 See more: https://www.youtube.com/watch?v=HIcCKT-eTKM&t=1695s
 See more: https://www.youtube.com/watch?v=GBOyF7CYTxU&t=199s
 See more: https://srivastavayushmaan1347.medium.com/creating-a-secure-and-scalable-aws-vpc-with-terraform-3270a189b228
+See more: https://www.geeksforgeeks.org/devops/amazon-vpc-introduction-to-amazon-virtual-cloud/
 
 # Steps to deploy infrastructure:
 terragrunt run-all init
