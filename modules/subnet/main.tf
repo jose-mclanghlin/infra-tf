@@ -14,6 +14,12 @@ locals {
       name = "${var.name_prefix}-private-${var.availability_zones[idx % length(var.availability_zones)]}-${idx + 1}"
     }
   ] : []
+  
+  nat_gateway_subnets = var.create_private_subnets && var.enable_nat_gateway ? (
+    var.single_nat_gateway ? 
+    slice(local.public_subnets, 0, 1) :
+    slice(local.public_subnets, 0, min(length(local.public_subnets), 2))
+  ) : []
 }
 
 resource "aws_subnet" "public" {
@@ -29,7 +35,6 @@ resource "aws_subnet" "public" {
     Type = "Public"
   })
 }
-
 
 resource "aws_route_table" "public" {
   vpc_id = var.vpc_id
@@ -143,13 +148,14 @@ resource "aws_subnet" "private" {
 
 # Create Elastic IPs for NAT Gateways
 resource "aws_eip" "nat" {
-  count = var.create_private_subnets && var.enable_nat_gateway ? (var.single_nat_gateway ? 1 : min(length(local.public_subnets), 2)) : 0
-
+  for_each = { for s in local.nat_gateway_subnets : s.name => s }
+  
   domain = "vpc"
-
+  
   tags = merge(var.tags, {
-    Name = "${var.name_prefix}-eip-nat-${count.index + 1}"
+    Name = "${var.name_prefix}-eip-nat-${each.value.az}"
     Type = "NAT Gateway EIP"
+    AZ   = each.value.az
   })
 
   depends_on = [aws_subnet.public]
@@ -157,14 +163,15 @@ resource "aws_eip" "nat" {
 
 # Create NAT Gateways in public subnets
 resource "aws_nat_gateway" "private" {
-  count = var.create_private_subnets && var.enable_nat_gateway ? (var.single_nat_gateway ? 1 : min(length(local.public_subnets), 2)) : 0
+  for_each = { for s in local.nat_gateway_subnets : s.name => s }
 
-  allocation_id = aws_eip.nat[count.index].id
-  subnet_id     = tolist(values(aws_subnet.public))[count.index].id
+  allocation_id = aws_eip.nat[each.key].id
+  subnet_id     = aws_subnet.public[each.key].id
 
   tags = merge(var.tags, {
-    Name = "${var.name_prefix}-nat-gateway-${count.index + 1}"
+    Name = "${var.name_prefix}-nat-gateway-${each.value.az}"
     Type = "NAT Gateway"
+    AZ   = each.value.az
   })
 
   depends_on = [aws_eip.nat, aws_route.public_internet]
@@ -188,11 +195,20 @@ resource "aws_route" "private_nat_gateway" {
 
   route_table_id         = each.value.id
   destination_cidr_block = "0.0.0.0/0"
-  # Use single NAT Gateway or distribute by AZ
-  nat_gateway_id = var.single_nat_gateway ? aws_nat_gateway.private[0].id : (
-    length(aws_nat_gateway.private) > 1 ? 
-    aws_nat_gateway.private[index(keys(aws_subnet.private), each.key) % length(aws_nat_gateway.private)].id :
-    aws_nat_gateway.private[0].id
+  
+  # Select NAT Gateway based on strategy
+  nat_gateway_id = var.single_nat_gateway ? (
+    # Single NAT Gateway: use the only one available
+    values(aws_nat_gateway.private)[0].id
+  ) : (
+    # Multiple NAT Gateways: distribute by AZ
+    # Extract AZ from private subnet key and find matching NAT Gateway
+    try(
+      [for nat_key, nat in aws_nat_gateway.private : 
+        nat.id if contains(each.key, regex("(us-[a-z]+-[0-9][a-z])", nat_key))
+      ][0],
+      values(aws_nat_gateway.private)[0].id  # fallback to first NAT Gateway
+    )
   )
 }
 

@@ -86,17 +86,17 @@ output "private_route_table_ids" {
 # NAT Gateway Outputs
 output "nat_gateway_ids" {
   description = "IDs of the NAT Gateways"
-  value       = var.create_private_subnets && var.enable_nat_gateway ? aws_nat_gateway.private[*].id : []
+  value       = var.create_private_subnets && var.enable_nat_gateway ? values(aws_nat_gateway.private)[*].id : []
 }
 
 output "nat_gateway_public_ips" {
   description = "Public IPs of the NAT Gateways"
-  value       = var.create_private_subnets && var.enable_nat_gateway ? aws_eip.nat[*].public_ip : []
+  value       = var.create_private_subnets && var.enable_nat_gateway ? values(aws_eip.nat)[*].public_ip : []
 }
 
 output "elastic_ip_ids" {
   description = "IDs of the Elastic IPs for NAT Gateways"
-  value       = var.create_private_subnets && var.enable_nat_gateway ? aws_eip.nat[*].id : []
+  value       = var.create_private_subnets && var.enable_nat_gateway ? values(aws_eip.nat)[*].id : []
 }
 
 # Private Network ACL Outputs
