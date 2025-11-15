@@ -1,7 +1,7 @@
 locals {
   public_subnets = [
     for idx, cidr in var.public_subnets_cidr : {
-      az   = var.availability_zones[idx % length(var.availability_zones)]
+      az   = var.availability_zones[idx % length(var.availability_zones)]  # round-robin assignment of AZs
       cidr = cidr
       name = "${var.name_prefix}-public-${var.availability_zones[idx % length(var.availability_zones)]}-${idx + 1}"
     }
@@ -9,7 +9,7 @@ locals {
   
   private_subnets = var.create_private_subnets ? [
     for idx, cidr in var.private_subnets_cidr : {
-      az   = var.availability_zones[idx % length(var.availability_zones)]
+      az   = var.availability_zones[idx % length(var.availability_zones)]  # round-robin assignment of AZs
       cidr = cidr
       name = "${var.name_prefix}-private-${var.availability_zones[idx % length(var.availability_zones)]}-${idx + 1}"
     }
