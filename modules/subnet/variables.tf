@@ -10,9 +10,12 @@ variable "internet_gateway_id" {
 }
 
 variable "public_subnets_cidr" {
-  description = "List of CIDR blocks for public subnets"
-  type        = list(string)
-  default     = []
+  description = "List of CIDR blocks for public subnets. Can be strings or objects with 'name' and 'cidr' keys"
+  type = list(object({
+    name = optional(string, null)
+    cidr = string
+  }))
+  default = []
 }
 
 variable "availability_zones" {
@@ -78,9 +81,12 @@ variable "public_nacl_outbound_ephemeral" {
 # ===== PRIVATE SUBNET VARIABLES =====
 
 variable "private_subnets_cidr" {
-  description = "List of CIDR blocks for private subnets"
-  type        = list(string)
-  default     = []
+  description = "List of CIDR blocks for private subnets. Can be strings or objects with 'name' and 'cidr' keys"
+  type = list(object({
+    name = optional(string, null)
+    cidr = string
+  }))
+  default = []
 }
 
 variable "create_private_subnets" {

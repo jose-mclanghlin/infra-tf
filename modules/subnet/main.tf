@@ -1,17 +1,19 @@
 locals {
+  # Process public subnets with custom names support
   public_subnets = [
-    for idx, cidr in var.public_subnets_cidr : {
+    for idx, subnet in var.public_subnets_cidr : {
       az   = var.availability_zones[idx % length(var.availability_zones)]  # round-robin assignment of AZs
-      cidr = cidr
-      name = "${var.name_prefix}-public-${var.availability_zones[idx % length(var.availability_zones)]}-${idx + 1}"
+      cidr = subnet.cidr
+      name = subnet.name != null ? subnet.name : "${var.name_prefix}-public-${var.availability_zones[idx % length(var.availability_zones)]}-${idx + 1}"
     }
   ]
   
+  # Process private subnets with custom names support
   private_subnets = var.create_private_subnets ? [
-    for idx, cidr in var.private_subnets_cidr : {
+    for idx, subnet in var.private_subnets_cidr : {
       az   = var.availability_zones[idx % length(var.availability_zones)]  # round-robin assignment of AZs
-      cidr = cidr
-      name = "${var.name_prefix}-private-${var.availability_zones[idx % length(var.availability_zones)]}-${idx + 1}"
+      cidr = subnet.cidr
+      name = subnet.name != null ? subnet.name : "${var.name_prefix}-private-${var.availability_zones[idx % length(var.availability_zones)]}-${idx + 1}"
     }
   ] : []
   
