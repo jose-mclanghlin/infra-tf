@@ -73,10 +73,8 @@ resource "aws_subnet" "private" {
   })
 }
 
-# Create route table for private subnets (isolated - no internet access)
+# Create route table for private subnets
 resource "aws_route_table" "private" {
-  count = var.create_private_subnets ? 1 : 0
-  
   vpc_id = var.vpc_id
 
   tags = merge(var.tags, {
@@ -90,5 +88,5 @@ resource "aws_route_table_association" "private" {
   for_each = var.create_private_subnets ? aws_subnet.private : {}
 
   subnet_id      = each.value.id
-  route_table_id = aws_route_table.private[0].id
+  route_table_id = aws_route_table.private.id
 }
