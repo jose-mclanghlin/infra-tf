@@ -15,7 +15,7 @@ locals {
     }
   ]
 
-  public_azs = distinct([for s in aws_subnet.public : s.availability_zone])
+  availability_zones_with_public_subnets = distinct([for s in aws_subnet.public : s.availability_zone])
 }
 
 # Public subnets
@@ -99,7 +99,7 @@ resource "aws_route_table_association" "private" {
 
 # Elastic IPs for NAT Gateways (one per AZ)
 resource "aws_eip" "nat" {
-  for_each = { for az in local.public_azs : az => az }
+  for_each = { for az in local.availability_zones_with_public_subnets : az => az }
   
   tags = {
     Name = "EIP-NAT-${each.key}"
@@ -109,7 +109,7 @@ resource "aws_eip" "nat" {
 
 # NAT Gateways (one per AZ)
 resource "aws_nat_gateway" "nat" {
-  for_each = { for az in local.public_azs : az => az }
+  for_each = { for az in local.availability_zones_with_public_subnets : az => az }
   
   allocation_id = aws_eip.nat[each.key].id // Associate corresponding EIP
   subnet_id     = element([for s in aws_subnet.public : s.id if s.availability_zone == each.key], 0)
