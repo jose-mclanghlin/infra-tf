@@ -117,7 +117,7 @@ resource "aws_nat_gateway" "nat" {
 resource "aws_route" "private_nat" {
   for_each = aws_nat_gateway.nat
 
-  route_table_id         = aws_route_table.private[each.key].id  # Tabla específica del AZ
+  route_table_id         = aws_route_table.private[each.key].id  # AZ-specific route table
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = each.value.id  # NAT Gateway del mismo AZ
+  nat_gateway_id         = each.value.id  # NAT Gateway from same AZ
 }
