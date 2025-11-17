@@ -105,7 +105,7 @@ resource "aws_eip" "nat" {
 resource "aws_nat_gateway" "nat" {
   for_each = { for az in local.public_azs : az => az }
   
-  allocation_id = aws_eip.nat[each.key].id
+  allocation_id = aws_eip.nat[each.key].id // Associate corresponding EIP
   subnet_id     = element([for s in aws_subnet.public : s.id if s.availability_zone == each.key], 0)
 
   tags = {
