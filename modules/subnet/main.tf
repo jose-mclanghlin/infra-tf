@@ -33,7 +33,7 @@ resource "aws_subnet" "public" {
   })
 }
 
-resource "aws_route_table" "public" {
+resource "aws_route_table" "public" { 
   for_each = { for az in distinct([for s in local.public_subnets : s.az]) : az => az }
   
   vpc_id = var.vpc_id

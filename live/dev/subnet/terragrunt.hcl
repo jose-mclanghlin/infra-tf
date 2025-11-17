@@ -17,12 +17,7 @@ dependency "vpc" {
   mock_outputs = {
     vpc_id              = "vpc-12345678"
     internet_gateway_id = "igw-12345678"
-    vpc_cidr_block     = "10.0.0.0/16"
-    default_route_table_id = "rtb-12345678"
   }
-  
-  # Configuración para manejar errores
-  mock_outputs_merge_strategy_with_state = "shallow"
 }
 
 inputs = {
@@ -32,6 +27,8 @@ inputs = {
   public_subnets_cidr = [
     { cidr = "10.0.10.0/24", name = "dev-public-web-az1" },
     { cidr = "10.0.11.0/24", name = "dev-public-web-az2" },
+    { cidr = "10.0.12.0/24", name = "dev-public-web-az3" },
+    { cidr = "10.0.13.0/24", name = "dev-public-web-az4" },
   ]
 
   availability_zones = ["us-east-1a", "us-east-1b"]
@@ -49,9 +46,6 @@ inputs = {
     Project     = "infra-tf"
     ManagedBy   = "terragrunt"
     Module      = "subnet"
-
-    Terraform   = "true"
-    CreatedBy   = "terragrunt"
     LastModified = timestamp()
   }
 }
