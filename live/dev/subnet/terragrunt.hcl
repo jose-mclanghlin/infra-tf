@@ -39,7 +39,7 @@ inputs = {
 
   # NAT Gateway configuration
   enable_nat_gateway = true
-  single_nat_gateway = false  # Multiple NAT Gateways for HA
+  single_nat_gateway = true  # Multiple NAT Gateways for HA
 
   # Public Network ACL Configuration
   enable_nacl                     = true

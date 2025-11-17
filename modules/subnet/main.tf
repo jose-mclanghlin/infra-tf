@@ -20,7 +20,7 @@ locals {
   nat_gateway_subnets = var.create_private_subnets && var.enable_nat_gateway ? (
     var.single_nat_gateway ? 
     slice(local.public_subnets, 0, 1) :
-    slice(local.public_subnets, 0, min(length(local.public_subnets), 2))
+    local.public_subnets
   ) : []
 }
 
@@ -185,9 +185,24 @@ resource "aws_nat_gateway" "private" {
   depends_on = [aws_eip.nat, aws_route.public_internet]
 }
 
-# Create single route table for all private subnets
+# Create route table for each AZ when not using single NAT Gateway
+resource "aws_route_table" "private_per_az" {
+  for_each = var.create_private_subnets && var.enable_nat_gateway && !var.single_nat_gateway ? {
+    for s in local.private_subnets : s.az => s
+  } : {}
+  
+  vpc_id = var.vpc_id
+
+  tags = merge(var.tags, {
+    Name = "${var.name_prefix}-rt-private-${each.key}"
+    Type = "Private with NAT"
+    AZ   = each.key
+  })
+}
+
+# Create single route table for all private subnets (when single NAT or no NAT)
 resource "aws_route_table" "private" {
-  count = var.create_private_subnets ? 1 : 0
+  count = var.create_private_subnets && (var.single_nat_gateway || !var.enable_nat_gateway) ? 1 : 0
   
   vpc_id = var.vpc_id
 
@@ -197,9 +212,25 @@ resource "aws_route_table" "private" {
   })
 }
 
-# Create single route to NAT Gateway for private subnets
+# Create routes to NAT Gateway for each AZ (when not using single NAT Gateway)
+resource "aws_route" "private_nat_gateway_per_az" {
+  for_each = var.create_private_subnets && var.enable_nat_gateway && !var.single_nat_gateway ? {
+    for s in local.private_subnets : s.az => s
+  } : {}
+
+  route_table_id         = aws_route_table.private_per_az[each.key].id
+  destination_cidr_block = "0.0.0.0/0"
+  
+  # Use NAT Gateway from the same AZ
+  nat_gateway_id = aws_nat_gateway.private[[
+    for subnet_name, subnet_info in local.nat_gateway_subnets : subnet_name
+    if subnet_info.az == each.key
+  ][0]].id
+}
+
+# Create single route to NAT Gateway for private subnets (when single NAT Gateway)
 resource "aws_route" "private_nat_gateway" {
-  count = var.create_private_subnets && var.enable_nat_gateway ? 1 : 0
+  count = var.create_private_subnets && var.enable_nat_gateway && var.single_nat_gateway ? 1 : 0
 
   route_table_id         = aws_route_table.private[0].id
   destination_cidr_block = "0.0.0.0/0"
@@ -208,9 +239,17 @@ resource "aws_route" "private_nat_gateway" {
   nat_gateway_id = values(aws_nat_gateway.private)[0].id
 }
 
-# Associate all private subnets with the private route table
+# Associate private subnets with their corresponding route tables (per AZ)
+resource "aws_route_table_association" "private_per_az" {
+  for_each = var.create_private_subnets && var.enable_nat_gateway && !var.single_nat_gateway ? aws_subnet.private : {}
+
+  subnet_id      = each.value.id
+  route_table_id = aws_route_table.private_per_az[each.value.availability_zone].id
+}
+
+# Associate all private subnets with single route table (when single NAT or no NAT)
 resource "aws_route_table_association" "private" {
-  for_each = var.create_private_subnets ? aws_subnet.private : {}
+  for_each = var.create_private_subnets && (var.single_nat_gateway || !var.enable_nat_gateway) ? aws_subnet.private : {}
 
   subnet_id      = each.value.id
   route_table_id = aws_route_table.private[0].id
