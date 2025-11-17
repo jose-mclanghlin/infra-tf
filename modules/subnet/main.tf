@@ -71,7 +71,7 @@ resource "aws_subnet" "private" {
   })
 }
 
-# Route tables for private subnets (one per AZ to avoid routing conflicts)
+# Route tables for private subnets
 resource "aws_route_table" "private" {
   for_each = { for az in distinct([for s in local.private_subnets : s.az]) : az => az }
   
