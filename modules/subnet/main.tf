@@ -15,7 +15,7 @@ locals {
     }
   ]
 
-  public_azs = distinct([for s in aws_subnet.public : s.availability_zone])
+  public_azs = distinct([for s in local.public_subnets : s.az])
 }
 
 # Public subnets
