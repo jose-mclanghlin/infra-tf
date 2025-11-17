@@ -31,14 +31,6 @@ inputs = {
   availability_zones = ["us-east-1a", "us-east-1b"]
   name_prefix        = "dev"
 
-  # Public Network ACL Configuration
-  enable_nacl                     = true
-  public_nacl_cidr               = "0.0.0.0/0"
-  public_nacl_inbound_ports      = [80, 443, 22]
-  public_nacl_inbound_ephemeral  = true
-  public_nacl_outbound_ports     = [80, 443, 53]
-  public_nacl_outbound_ephemeral = true
-
   tags = {
     Environment = "dev"
     Project     = "infra-tf"
