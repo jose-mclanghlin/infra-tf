@@ -20,8 +20,8 @@ output "public_subnet_availability_zones" {
 }
 
 output "public_route_table_id" {
-  description = "ID of the public route table"
-  value       = aws_route_table.public.id
+  description = "IDs of the public route tables (per AZ)"
+  value       = values(aws_route_table.public)[*].id
 }
 
 output "subnet_count" {
@@ -51,8 +51,8 @@ output "private_subnet_azs" {
 }
 
 output "private_route_table_id" {
-  description = "ID of the private route table"
-  value       = var.create_private_subnets ? aws_route_table.private.id : null
+  description = "IDs of the private route tables (per AZ)"
+  value       = var.create_private_subnets ? values(aws_route_table.private)[*].id : []
 }
 
 # Combined outputs
@@ -129,13 +129,13 @@ output "subnet_details" {
 
 # Route table ARNs (missing from current outputs)
 output "public_route_table_arn" {
-  description = "ARN of the public route table"
-  value       = aws_route_table.public.arn
+  description = "ARNs of the public route tables (per AZ)"
+  value       = values(aws_route_table.public)[*].arn
 }
 
 output "private_route_table_arn" {
-  description = "ARN of the private route table"
-  value       = var.create_private_subnets ? aws_route_table.private.arn : null
+  description = "ARNs of the private route tables (per AZ)"
+  value       = var.create_private_subnets ? values(aws_route_table.private)[*].arn : []
 }
 
 # Summary counts

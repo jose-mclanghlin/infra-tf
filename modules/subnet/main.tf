@@ -15,7 +15,7 @@ locals {
     }
   ]
 
-  public_azs = distinct([for s in local.public_subnets : s.az])
+  public_azs = distinct([for s in aws_subnet.public : s.availability_zone])
 }
 
 # Public subnets
@@ -34,24 +34,30 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_route_table" "public" {
+  for_each = { for az in distinct([for s in local.public_subnets : s.az]) : az => az }
+  
   vpc_id = var.vpc_id
 
   tags = merge(var.tags, {
-    Name = "${var.name_prefix}-public-rt"
+    Name = "${var.name_prefix}-rt-public-${each.key}"
     Type = "Public"
+    AZ   = each.key
   })
 }
 
 resource "aws_route" "public_internet" {
-  route_table_id         = aws_route_table.public.id
+  for_each = aws_route_table.public
+  
+  route_table_id         = each.value.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = var.internet_gateway_id
 }
 
 resource "aws_route_table_association" "public" {
-  for_each      = aws_subnet.public
-  subnet_id     = each.value.id
-  route_table_id = aws_route_table.public.id
+  for_each = aws_subnet.public
+  
+  subnet_id      = each.value.id
+  route_table_id = aws_route_table.public[each.value.availability_zone].id
 }
 
 
@@ -73,7 +79,7 @@ resource "aws_subnet" "private" {
 
 # Route tables for private subnets
 resource "aws_route_table" "private" {
-  for_each = { for az in distinct([for s in local.private_subnets : s.az]) : az => az }
+  for_each = { for az in distinct([for s in aws_subnet.private : s.availability_zone]) : az => az }
   
   vpc_id = var.vpc_id
 
