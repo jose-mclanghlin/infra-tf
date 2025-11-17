@@ -1,5 +1,5 @@
 locals {
-  # Process public subnets with custom names support
+  # public subnets
   public_subnets = [
     for idx, subnet in var.public_subnets_cidr : {
       az   = var.availability_zones[idx % length(var.availability_zones)]  # round-robin assignment of AZs
@@ -8,7 +8,7 @@ locals {
     }
   ]
   
-  # Process private subnets with custom names support
+  # private subnets
   private_subnets = [
     for idx, subnet in var.private_subnets_cidr : {
       az   = var.availability_zones[idx % length(var.availability_zones)]  # round-robin assignment of AZs
