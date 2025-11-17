@@ -9,13 +9,13 @@ locals {
   ]
   
   # Process private subnets with custom names support
-  private_subnets = var.create_private_subnets ? [
+  private_subnets = [
     for idx, subnet in var.private_subnets_cidr : {
       az   = var.availability_zones[idx % length(var.availability_zones)]  # round-robin assignment of AZs
       cidr = subnet.cidr
       name = subnet.name != null ? subnet.name : "${var.name_prefix}-private-${var.availability_zones[idx % length(var.availability_zones)]}-${idx + 1}"
     }
-  ] : []
+  ]
 }
 
 resource "aws_subnet" "public" {
@@ -57,7 +57,7 @@ resource "aws_route_table_association" "public" {
 
 # Create private subnets
 resource "aws_subnet" "private" {
-  for_each = var.create_private_subnets ? { for s in local.private_subnets : s.name => s } : {}
+  for_each = { for s in local.private_subnets : s.name => s }
 
   vpc_id            = var.vpc_id
   cidr_block        = each.value.cidr
@@ -85,7 +85,7 @@ resource "aws_route_table" "private" {
 
 # Associate all private subnets with the private route table
 resource "aws_route_table_association" "private" {
-  for_each = var.create_private_subnets ? aws_subnet.private : {}
+  for_each = aws_subnet.private
 
   subnet_id      = each.value.id
   route_table_id = aws_route_table.private.id
