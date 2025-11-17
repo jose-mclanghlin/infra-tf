@@ -18,6 +18,15 @@ variable "public_subnets_cidr" {
   default = []
 }
 
+variable "private_subnets_cidr" {
+  description = "List of CIDR blocks for private subnets. Can be strings or objects with 'name' and 'cidr' keys"
+  type = list(object({
+    name = optional(string, null)
+    cidr = string
+  }))
+  default = []
+}
+
 variable "availability_zones" {
   description = "List of Availability Zones where public subnets will be created"
   type        = list(string)
