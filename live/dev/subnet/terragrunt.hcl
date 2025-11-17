@@ -31,16 +31,6 @@ inputs = {
   availability_zones = ["us-east-1a", "us-east-1b"]
   name_prefix        = "dev"
 
-  create_private_subnets = true
-  private_subnets_cidr = [
-    { cidr = "10.0.20.0/24", name = "dev-private-app-az1" },
-    { cidr = "10.0.21.0/24", name = "dev-private-app-az2" },
-  ]
-
-  # NAT Gateway configuration
-  enable_nat_gateway = true
-  single_nat_gateway = true  # Multiple NAT Gateways for HA
-
   # Public Network ACL Configuration
   enable_nacl                     = true
   public_nacl_cidr               = "0.0.0.0/0"
@@ -48,14 +38,6 @@ inputs = {
   public_nacl_inbound_ephemeral  = true
   public_nacl_outbound_ports     = [80, 443, 53]
   public_nacl_outbound_ephemeral = true
-
-  # Private Network ACL Configuration
-  enable_private_nacl              = true
-  private_nacl_cidr                = "10.0.0.0/16"
-  private_nacl_inbound_ports       = [3306, 5432, 6379, 8080]
-  private_nacl_inbound_ephemeral   = true
-  private_nacl_outbound_ports      = [80, 443]
-  private_nacl_outbound_ephemeral  = true
 
   tags = {
     Environment = "dev"

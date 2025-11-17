@@ -6,6 +6,7 @@ See more: https://www.geeksforgeeks.org/devops/amazon-vpc-introduction-to-amazon
 See more: https://medium.com/@mudasirhaji/build-your-own-aws-vpc-a-hands-on-guide-for-production-ready-networking-c616551912a7
 See more: https://medium.com/@deepeshjaiswal6734/how-to-design-for-production-amazon-vpc-6df460aa17e
 See more: https://www.youtube.com/watch?v=FZPTL_kNvXc&list=WL&index=24&t=1811s
+See more: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-example-private-subnets-nat.html
 
 # Steps to deploy infrastructure:
 terragrunt run-all init
