@@ -26,8 +26,6 @@ inputs = {
   public_subnets_cidr = [
     { cidr = "10.0.10.0/24", name = "dev-public-web-az1" },
     { cidr = "10.0.11.0/24", name = "dev-public-web-az2" },
-    { cidr = "10.0.12.0/24", name = "dev-public-alb-az1" },
-    { cidr = "10.0.13.0/24", name = "dev-public-alb-az2" }
   ]
 
   availability_zones = ["us-east-1a", "us-east-1b"]
@@ -37,8 +35,6 @@ inputs = {
   private_subnets_cidr = [
     { cidr = "10.0.20.0/24", name = "dev-private-app-az1" },
     { cidr = "10.0.21.0/24", name = "dev-private-app-az2" },
-    { cidr = "10.0.22.0/24", name = "dev-private-db-az1" },
-    { cidr = "10.0.23.0/24", name = "dev-private-db-az2" }
   ]
 
   # NAT Gateway configuration
