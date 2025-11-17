@@ -71,19 +71,24 @@ resource "aws_subnet" "private" {
   })
 }
 
+# Route tables for private subnets (one per AZ to avoid routing conflicts)
 resource "aws_route_table" "private" {
+  for_each = { for az in distinct([for s in local.private_subnets : s.az]) : az => az }
+  
   vpc_id = var.vpc_id
 
   tags = merge(var.tags, {
-    Name = "${var.name_prefix}-rt-private"
+    Name = "${var.name_prefix}-rt-private-${each.key}"
     Type = "Private"
+    AZ   = each.key
   })
 }
 
 resource "aws_route_table_association" "private" {
-  for_each      = aws_subnet.private
-  subnet_id     = each.value.id
-  route_table_id = aws_route_table.private.id
+  for_each = aws_subnet.private
+  
+  subnet_id      = each.value.id
+  route_table_id = aws_route_table.private[each.value.availability_zone].id
 }
 
 # Elastic IPs for NAT Gateways (one per AZ)
@@ -106,4 +111,13 @@ resource "aws_nat_gateway" "nat" {
   tags = {
     Name = "NAT-GW-${each.key}"
   }
+}
+
+# Routes for private subnets to use NAT Gateways (one route per AZ table)
+resource "aws_route" "private_nat" {
+  for_each = aws_nat_gateway.nat
+
+  route_table_id         = aws_route_table.private[each.key].id  # Tabla específica del AZ
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = each.value.id  # NAT Gateway del mismo AZ
 }
