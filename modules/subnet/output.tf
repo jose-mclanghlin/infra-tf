@@ -52,7 +52,7 @@ output "private_subnet_azs" {
 
 output "private_route_table_id" {
   description = "ID of the private route table"
-  value       = var.create_private_subnets ? aws_route_table.private[0].id : null
+  value       = var.create_private_subnets ? aws_route_table.private.id : null
 }
 
 # Combined outputs
