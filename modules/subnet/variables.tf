@@ -27,6 +27,12 @@ variable "private_subnets_cidr" {
   default = []
 }
 
+variable "create_private_subnets" {
+  description = "Whether to create private subnets"
+  type        = bool
+  default     = false
+}
+
 variable "availability_zones" {
   description = "List of Availability Zones where public subnets will be created"
   type        = list(string)

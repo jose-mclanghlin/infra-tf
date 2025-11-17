@@ -28,3 +28,38 @@ output "subnet_count" {
   description = "Number of public subnets created"
   value       = length(aws_subnet.public)
 }
+
+# Private Subnet Outputs
+output "private_subnet_ids" {
+  description = "IDs of the private subnets"
+  value       = var.create_private_subnets ? values(aws_subnet.private)[*].id : []
+}
+
+output "private_subnet_arns" {
+  description = "ARNs of the private subnets"
+  value       = var.create_private_subnets ? values(aws_subnet.private)[*].arn : []
+}
+
+output "private_subnet_cidrs" {
+  description = "CIDR blocks of the private subnets"
+  value       = var.create_private_subnets ? values(aws_subnet.private)[*].cidr_block : []
+}
+
+output "private_subnet_azs" {
+  description = "Availability zones of the private subnets"
+  value       = var.create_private_subnets ? values(aws_subnet.private)[*].availability_zone : []
+}
+
+output "private_route_table_id" {
+  description = "ID of the private route table"
+  value       = var.create_private_subnets ? aws_route_table.private[0].id : null
+}
+
+# Combined outputs
+output "all_subnet_ids" {
+  description = "All subnet IDs (public and private)"
+  value = concat(
+    values(aws_subnet.public)[*].id,
+    var.create_private_subnets ? values(aws_subnet.private)[*].id : []
+  )
+}

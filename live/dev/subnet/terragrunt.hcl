@@ -31,6 +31,13 @@ inputs = {
   availability_zones = ["us-east-1a", "us-east-1b"]
   name_prefix        = "dev"
 
+  # Private Subnet Configuration (basic - no internet access)
+  create_private_subnets = true
+  private_subnets_cidr = [
+    { cidr = "10.0.20.0/24", name = "dev-private-app-az1" },
+    { cidr = "10.0.21.0/24", name = "dev-private-app-az2" },
+  ]
+
   tags = {
     Environment = "dev"
     Project     = "infra-tf"
