@@ -54,7 +54,6 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
-# ===== PRIVATE SUBNET RESOURCES =====
 
 # Create private subnets
 resource "aws_subnet" "private" {
