@@ -15,7 +15,7 @@ dependency "vpc" {
 }
 
 inputs = {
-  name        = "sg-ec2-prod"
+  name        = "sg-server"
   description = "Security Group for EC2 instances"
 
   vpc_id = dependency.vpc.outputs.vpc_id
@@ -41,7 +41,10 @@ inputs = {
   ]
 
   tags = {
-    Environment = "prod"
-    Component   = "ec2"
+    Environment = "dev"
+    Module   = "ec2"
+    Project  = "infra-tf"
+    ManagedBy   = "terragrunt"
+    LastModified = timestamp()
   }
 }
