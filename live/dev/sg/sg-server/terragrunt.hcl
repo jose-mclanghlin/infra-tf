@@ -9,30 +9,40 @@ include {
 dependency "vpc" {
   config_path = "../../vpc"
 
-   mock_outputs = {
-    vpc_id              = "vpc-12345678"
+  mock_outputs = {
+    vpc_id = "vpc-12345678"
+  }
+}
+
+dependency "alb" {
+  config_path = "../../alb"
+
+  mock_outputs = {
+    alb_sg_id = "sg-99999999"
   }
 }
 
 inputs = {
-  name        = "sg-server"
-  description = "Security Group for EC2 instances"
+  name        = "sg-priv-servers"
+  description = "Security Group for private EC2 instances"
 
   vpc_id = dependency.vpc.outputs.vpc_id
 
+  # Ingress: ONLY traffic from the Load Balancer
   ingress_rules = [
     {
-      description = "SSH from your IP"
-      from_port   = 22
-      to_port     = 22
-      protocol    = "tcp"
-      cidr_blocks = ["YOUR_PUBLIC_IP/32"]
+      description     = "Allow HTTP from ALB"
+      from_port       = 80
+      to_port         = 80
+      protocol        = "tcp"
+      security_groups = [dependency.alb.outputs.alb_sg_id]
     }
   ]
 
+  # Egress: all traffic allowed (recommended for private instances)
   egress_rules = [
     {
-      description = "All outbound traffic allowed"
+      description = "Allow all outbound traffic"
       from_port   = 0
       to_port     = 0
       protocol    = "-1"
@@ -41,10 +51,10 @@ inputs = {
   ]
 
   tags = {
-    Environment = "dev"
-    Module   = "ec2"
-    Project  = "infra-tf"
-    ManagedBy   = "terragrunt"
-    LastModified = timestamp()
+    Environment   = "dev"
+    Module        = "ec2"
+    Project       = "infra-tf"
+    ManagedBy     = "terragrunt"
+    LastModified  = timestamp()
   }
 }
