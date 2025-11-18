@@ -13,7 +13,6 @@ terraform {
 dependency "vpc" {
   config_path = "../vpc"
   
-  # Mock outputs más completos para testing
   mock_outputs = {
     vpc_id              = "vpc-12345678"
     internet_gateway_id = "igw-12345678"
