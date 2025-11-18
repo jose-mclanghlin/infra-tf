@@ -15,7 +15,7 @@ dependency "vpc" {
 }
 
 inputs = {
-  name        = "sg-alb"
+  name        = "alb-sg"
   description = "Security Group for Application Load Balancer"
 
   vpc_id = dependency.vpc.outputs.vpc_id

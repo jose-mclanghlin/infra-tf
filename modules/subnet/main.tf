@@ -114,7 +114,7 @@ resource "aws_nat_gateway" "nat" {
   for_each = { for az in local.availability_zones_with_public_subnets : az => az }
   
   allocation_id = aws_eip.nat[each.key].id // Associate corresponding EIP
-  subnet_id = one([for s in aws_subnet.public : s.id if s.availability_zone == each.key])
+  subnet_id = element([for s in aws_subnet.public : s.id if s.availability_zone == each.key], 0)
 
   tags = {
     Name = "NAT-GW-${each.key}"

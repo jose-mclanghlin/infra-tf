@@ -23,7 +23,7 @@ dependency "alb" {
 }
 
 inputs = {
-  name        = "sg-priv-servers"
+  name        = "server-sg-priv"
   description = "Security Group for private EC2 instances"
 
   vpc_id = dependency.vpc.outputs.vpc_id
