@@ -1,5 +1,5 @@
 terraform {
-  source = "../../../../modules/security-group"
+  source = "../../../../modules/sg"
 }
 
 include {
@@ -8,6 +8,10 @@ include {
 
 dependency "vpc" {
   config_path = "../../vpc"
+
+   mock_outputs = {
+    vpc_id              = "vpc-12345678"
+  }
 }
 
 inputs = {
