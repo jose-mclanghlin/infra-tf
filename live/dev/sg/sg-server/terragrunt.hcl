@@ -18,7 +18,7 @@ dependency "sg-alb" {
   config_path = "../../sg/sg-alb"
 
   mock_outputs = {
-    alb_sg_id = "sg-99999999"
+    security_group_id = "sg-99999999"
   }
 }
 
