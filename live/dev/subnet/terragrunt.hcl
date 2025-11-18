@@ -45,6 +45,7 @@ inputs = {
     Project     = "infra-tf"
     ManagedBy   = "terragrunt"
     Module      = "subnet"
+    Team        = "platform"
     LastModified = timestamp()
   }
 }

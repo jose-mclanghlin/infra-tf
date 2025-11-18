@@ -20,5 +20,8 @@ inputs = {
     Environment = "dev"
     Project     = "infra-tf"
     ManagedBy   = "terragrunt"
+    Module      = "vpc"
+    Team        = "platform"
+    LastModified = timestamp()
   }
 }

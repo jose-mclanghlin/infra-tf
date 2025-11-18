@@ -55,5 +55,6 @@ inputs = {
     Module        = "alb"
     Project       = "infra-tf"
     ManagedBy     = "terragrunt"
+    Team          = "platform"
   }
 }

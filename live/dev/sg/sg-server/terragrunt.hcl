@@ -52,7 +52,7 @@ inputs = {
 
   tags = {
     Environment   = "dev"
-    Module        = "ec2"
+    Module        = "sg-servers"
     Project       = "infra-tf"
     ManagedBy     = "terragrunt"
     LastModified  = timestamp()
