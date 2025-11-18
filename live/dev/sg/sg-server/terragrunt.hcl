@@ -14,7 +14,7 @@ dependency "vpc" {
   }
 }
 
-dependency "alb" {
+dependency "sg-alb" {
   config_path = "../../sg/sg-alb"
 
   mock_outputs = {
@@ -35,7 +35,7 @@ inputs = {
       from_port       = 80
       to_port         = 80
       protocol        = "tcp"
-      security_groups = [dependency.alb.outputs.alb_sg_id]
+      security_groups = [dependency.sg-alb.outputs.security_group_id]
     }
   ]
 
