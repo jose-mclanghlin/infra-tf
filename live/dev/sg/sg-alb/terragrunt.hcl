@@ -60,5 +60,6 @@ inputs = {
     Project       = "infra-tf"
     ManagedBy     = "terragrunt"
     Team          = "platform"
+    LastModified  = timestamp()
   }
 }
