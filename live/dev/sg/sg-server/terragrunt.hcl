@@ -15,7 +15,7 @@ dependency "vpc" {
 }
 
 dependency "alb" {
-  config_path = "../../alb"
+  config_path = "../../sg/sg-alb"
 
   mock_outputs = {
     alb_sg_id = "sg-99999999"
