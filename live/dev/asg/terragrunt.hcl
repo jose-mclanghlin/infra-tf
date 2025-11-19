@@ -41,6 +41,6 @@ inputs = {
   min     = 1
   desired = 2
   max     = 4
-  subnets = dependency.subnets.outputs.private_subnet_ids
+  subnets = dependency.subnet.outputs.private_subnet_ids
   security_groups = [dependency.sg_server.outputs.security_group_id]
 }
