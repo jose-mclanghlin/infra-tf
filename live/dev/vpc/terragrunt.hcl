@@ -22,6 +22,5 @@ inputs = {
     ManagedBy   = "terragrunt"
     Module      = "vpc"
     Team        = "platform"
-    LastModified = timestamp()
   }
 }

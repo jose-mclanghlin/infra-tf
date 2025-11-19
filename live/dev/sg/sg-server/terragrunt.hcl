@@ -59,6 +59,5 @@ inputs = {
     Module        = "sg-servers"
     Project       = "infra-tf"
     ManagedBy     = "terragrunt"
-    LastModified  = timestamp()
   }
 }

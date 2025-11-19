@@ -46,6 +46,5 @@ inputs = {
     ManagedBy   = "terragrunt"
     Module      = "subnet"
     Team        = "platform"
-    LastModified = timestamp()
   }
 }
