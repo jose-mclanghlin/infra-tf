@@ -41,5 +41,5 @@ inputs = {
   subnets = dependency.subnet.outputs.private_subnet_ids
   security_groups = [dependency.sg_server.outputs.security_group_id]
 
-  user_data = file("${get_terragrunt_dir()}/user_data.sh.tpl")
+  user_data = file("${get_terragrunt_dir()}/user_data.sh")
 }

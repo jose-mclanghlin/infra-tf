@@ -8,7 +8,7 @@ See more: https://medium.com/@deepeshjaiswal6734/how-to-design-for-production-am
 See more: https://www.youtube.com/watch?v=FZPTL_kNvXc&list=WL&index=24&t=1811s
 See more: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-example-private-subnets-nat.html
 See more: https://medium.com/@ashleylawbrown/aws-vpc-design-secure-scalable-and-multi-az-ready-b8be0c237639
-See more: https://github.com/gruntwork-io/terragrunt-infrastructure-catalog-example?utm_source=chatgpt.com
+See more: https://github.com/gruntwork-io/terragrunt-infrastructure-catalog-example
 
 # Steps to deploy infrastructure:
 terragrunt run-all init
