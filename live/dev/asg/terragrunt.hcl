@@ -32,7 +32,7 @@ dependency "sg_server" {
 
 inputs = {
   name          = "dev-app"
-  ami_id        = "ami-0e123456789abc"
+  ami_id        = "ami-0c02fb55956c7d316"
   instance_type = "t3.micro"
 
   min     = 1
