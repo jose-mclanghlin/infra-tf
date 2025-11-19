@@ -15,12 +15,16 @@ dependency "vpc" {
   config_path = "../../vpc"
 }
 
-dependency "sg_priv" {
+dependency "sg_server" {
   config_path = "../../security-groups/servers"
 }
 
 dependency "subnets" {
   config_path = "../../subnets"
+
+  mock_outputs = {
+    private_subnet_ids = ["subnet-abcdef01", "subnet-abcdef02"]
+  }
 }
 
 inputs = {
@@ -31,7 +35,7 @@ inputs = {
   subnet_id       = dependency.subnets.outputs.private_subnet_ids[0]
 
   security_groups = [
-    dependency.sg_priv.outputs.sg_id
+    dependency.sg_server.outputs.security_group_id
   ]
 
   instance_profile = "ec2-ssm-profile"
