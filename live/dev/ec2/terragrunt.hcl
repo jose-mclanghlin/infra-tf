@@ -41,6 +41,15 @@ inputs = {
       subnet_id        = dependency.subnet.outputs.private_subnet_ids[0]
       sg_ids           = [dependency.sg_server.outputs.security_group_id]
       root_volume_size = 30
+      name             = "server-az1"
+      tags = {
+        Environment  = "dev"
+        Project      = "infra-tf"
+        ManagedBy    = "terragrunt"
+        Module       = "ec2"
+        Team         = "platform"
+        LastModified = timestamp()
+      }
     }
     server-az2 = {
       ami              = "ami-123"
@@ -48,6 +57,15 @@ inputs = {
       subnet_id        = dependency.subnet.outputs.private_subnet_ids[1]
       sg_ids           = [dependency.sg_server.outputs.security_group_id]
       root_volume_size = 30
+      name             = "server-az2"
+      tags = {
+        Environment  = "dev"
+        Project      = "infra-tf"
+        ManagedBy    = "terragrunt"
+        Module       = "ec2"
+        Team         = "platform"
+        LastModified = timestamp()
+      }
     }
   }
 }
