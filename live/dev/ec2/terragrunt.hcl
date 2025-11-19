@@ -36,7 +36,7 @@ dependency "sg_server" {
 inputs = {
   servers = {
     server-az1 = {
-      ami              = "ami-123"
+       ami              = "ami-0c02fb55956c7d316"
       instance_type    = "t3.micro"
       subnet_id        = dependency.subnet.outputs.private_subnet_ids[0]
       sg_ids           = [dependency.sg_server.outputs.security_group_id]
@@ -52,7 +52,7 @@ inputs = {
       }
     }
     server-az2 = {
-      ami              = "ami-123"
+      ami              = "ami-0c02fb55956c7d316"
       instance_type    = "t3.micro"
       subnet_id        = dependency.subnet.outputs.private_subnet_ids[1]
       sg_ids           = [dependency.sg_server.outputs.security_group_id]
