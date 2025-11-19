@@ -12,13 +12,9 @@ terraform {
 
 dependency "vpc" {
   config_path = "../vpc"
-
-  mock_outputs = {
-    vpc_id              = "vpc-12345678"
-  }
 }
 
-dependency "subnets" {
+dependency "subnet" {
   config_path = "../subnet"
 
   mock_outputs = {
@@ -29,11 +25,11 @@ dependency "subnets" {
   }
 }
 
-dependency "sg" {
-  config_path = "../sg"
+dependency "sg_server" {
+  config_path = "../sg/sg-server"
 
   mock_outputs = {
-    security_group_id = "sg-mock"
+    security_group_id = "sg-mock-123456"
   }
 }
 
@@ -46,5 +42,5 @@ inputs = {
   desired = 2
   max     = 4
   subnets = dependency.subnets.outputs.private_subnet_ids
-  security_groups = [dependency.sg.outputs.security_group_id]
+  security_groups = [dependency.sg_server.outputs.security_group_id]
 }
