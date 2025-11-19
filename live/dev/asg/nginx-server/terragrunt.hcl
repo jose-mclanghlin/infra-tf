@@ -31,7 +31,7 @@ dependency "sg_server" {
 
 inputs = {
   name          = "nginx-server"
-  ami_id        = "ami-0c02fb55956c7d316"
+  ami_id        = "ami-0fa3fe0fa7920f68e"
   instance_type = "t3.micro"
 
   min     = 1
