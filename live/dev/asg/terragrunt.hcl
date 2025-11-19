@@ -10,9 +10,6 @@ include "env" {
   path = find_in_parent_folders("terragrunt.hcl")
 }
 
-dependency "vpc" {
-  config_path = "../vpc"
-}
 
 dependency "subnet" {
   config_path = "../subnet"
