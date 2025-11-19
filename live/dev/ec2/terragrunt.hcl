@@ -20,36 +20,32 @@ dependency "sg_server" {
 
 dependency "subnets" {
   config_path = "../subnets"
-  
-  mock_outputs = {
-    private_subnet_ids = ["subnet-abcdef01", "subnet-abcdef02"]
-  }
 }
 
 inputs = {
-  name            = "private-server-1"
-  ami             = "ami-xxxxxxxx"
-  instance_type   = "t3.micro"
+  servers = {
+    server-az1 = {
+      ami              = "ami-123"
+      instance_type    = "t3.micro"
+      subnet_id        = dependency.subnets.outputs.private_subnet_ids[0]
+      sg_ids           = [dependency.sg.outputs.sg_id]
+      root_volume_size = 30
+    }
 
-  subnet_id       = dependency.subnets.outputs.private_subnet_ids[0]
+    server-az2 = {
+      ami              = "ami-123"
+      instance_type    = "t3.micro"
+      subnet_id        = dependency.subnets.outputs.private_subnet_ids[1]
+      sg_ids           = [dependency.sg.outputs.sg_id]
+      root_volume_size = 30
+    }
 
-  security_groups = [
-    dependency.sg_server.outputs.security_group_id
-  ]
-
-  instance_profile = "ec2-ssm-profile"
-
-  user_data = <<EOF
-#!/bin/bash
-echo "Hello from private instance" > /var/www/index.html
-EOF
-
-  tags = {
-    Environment = "dev"
-    Project     = "infra-tf"
-    ManagedBy   = "terragrunt"
-    Module      = "vpc"
-    Team        = "platform"
-    LastModified = timestamp()
+    server-az3 = {
+      ami              = "ami-123"
+      instance_type    = "t3.micro"
+      subnet_id        = dependency.subnets.outputs.private_subnet_ids[2]
+      sg_ids           = [dependency.sg.outputs.sg_id]
+      root_volume_size = 30
+    }
   }
 }
