@@ -2,9 +2,8 @@ include "root" {
   path = find_in_parent_folders("root.hcl")
 }
 
-
 terraform {
-  source = "../../../../modules/ec2"
+  source = "../../../modules/ec2"
 }
 
 include {
@@ -12,15 +11,19 @@ include {
 }
 
 dependency "vpc" {
-  config_path = "../../vpc"
+  config_path = "../vpc"
 }
 
-dependency "sg_priv" {
-  config_path = "../../security-groups/servers"
+dependency "sg_server" {
+  config_path = "../sg/sg-server"
 }
 
 dependency "subnets" {
-  config_path = "../../subnets"
+  config_path = "../subnets"
+  
+  mock_outputs = {
+    private_subnet_ids = ["subnet-abcdef01", "subnet-abcdef02"]
+  }
 }
 
 inputs = {
@@ -31,7 +34,7 @@ inputs = {
   subnet_id       = dependency.subnets.outputs.private_subnet_ids[0]
 
   security_groups = [
-    dependency.sg_priv.outputs.sg_id
+    dependency.sg_server.outputs.security_group_id
   ]
 
   instance_profile = "ec2-ssm-profile"
@@ -41,7 +44,7 @@ inputs = {
 echo "Hello from private instance" > /var/www/index.html
 EOF
 
-   tags = {
+  tags = {
     Environment = "dev"
     Project     = "infra-tf"
     ManagedBy   = "terragrunt"
