@@ -20,21 +20,17 @@ dependency "subnet" {
   mock_outputs = {
     private_subnet_ids = [
       "subnet-mock-az1",
-      "subnet-mock-az2",
-      "subnet-mock-az3",
+      "subnet-mock-az2"
     ]
   }
-
-  mock_outputs_allowed_terraform_commands = [
-    "init",
-    "validate",
-    "plan",
-    "apply"
-  ]
 }
 
 dependency "sg_server" {
   config_path = "../sg/sg-server"
+
+  mock_outputs = {
+    security_group_id = "sg-mock-123456"
+  }
 }
 
 inputs = {
@@ -50,13 +46,6 @@ inputs = {
       ami              = "ami-123"
       instance_type    = "t3.micro"
       subnet_id        = dependency.subnet.outputs.private_subnet_ids[1]
-      sg_ids           = [dependency.sg_server.outputs.security_group_id]
-      root_volume_size = 30
-    }
-    server-az3 = {
-      ami              = "ami-123"
-      instance_type    = "t3.micro"
-      subnet_id        = dependency.subnet.outputs.private_subnet_ids[2]
       sg_ids           = [dependency.sg_server.outputs.security_group_id]
       root_volume_size = 30
     }
