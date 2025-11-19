@@ -16,7 +16,7 @@ dependency "vpc" {
 }
 
 dependency "sg_server" {
-  config_path = "../../security-groups/servers"
+  config_path = "../../sg/sg-server"
 }
 
 dependency "subnets" {
