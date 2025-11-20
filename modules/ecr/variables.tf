@@ -1,8 +1,7 @@
-
 variable "name" {
   description = "The name of the ECR repository"
   type        = string
-
+  
   validation {
     condition     = length(var.name) > 0 && length(var.name) <= 256
     error_message = "The 'name' variable must not be empty and must be 256 characters or fewer."
@@ -12,7 +11,7 @@ variable "name" {
 variable "force_delete" {
   description = "Allow the ECR repository to be deleted even if it contains images"
   type        = bool
-
+  
   validation {
     condition     = contains([true, false], var.force_delete)
     error_message = "'force_delete' must be either true or false."
