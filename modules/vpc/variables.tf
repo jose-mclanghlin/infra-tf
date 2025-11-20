@@ -42,7 +42,6 @@ variable "enable_dns_support" {
     condition     = var.enable_dns_support == true || var.enable_dns_support == false
     error_message = "enable_dns_support must be true or false."
   }
-
   default = true
 }
 
@@ -55,7 +54,6 @@ variable "enable_dns_hostnames" {
     condition     = var.enable_dns_hostnames == true || var.enable_dns_hostnames == false
     error_message = "enable_dns_hostnames must be true or false."
   }
-
   default = true
 }
 
