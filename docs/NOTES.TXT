@@ -10,6 +10,9 @@ See more: https://docs.aws.amazon.com/vpc/latest/userguide/vpc-example-private-s
 See more: https://medium.com/@ashleylawbrown/aws-vpc-design-secure-scalable-and-multi-az-ready-b8be0c237639
 See more: https://github.com/gruntwork-io/terragrunt-infrastructure-catalog-example
 See more: https://terragrunt.gruntwork.io/docs/getting-started/quick-start/
+See more: https://developer.hashicorp.com/terraform/cloud-docs/recommended-practices
+See more: https://terragrunt.gruntwork.io/docs/reference/terragrunt-architecture/
+See more: https://docs.aws.amazon.com/wellarchitected/latest/framework/networking.html
 
 # Steps to deploy infrastructure:
 terragrunt run-all init
