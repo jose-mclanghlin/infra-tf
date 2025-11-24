@@ -7,12 +7,12 @@ remote_state {
   }
 
   config = {
-    bucket         = "plub-use1-terraform-state"
+    bucket         = "aws-use1-terraform-state"
     key            = "${path_relative_to_include()}/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
     use_lockfile   = true
-    dynamodb_table = "plub-use1-terraform-lock"
+    dynamodb_table = "aws-use1-terraform-lock"
   }
 }
 
