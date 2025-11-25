@@ -23,6 +23,9 @@ inputs = {
   vpc_id              = dependency.vpc.outputs.vpc_id
   internet_gateway_id = dependency.vpc.outputs.internet_gateway_id
 
+  availability_zones = ["us-east-1a", "us-east-1b"]
+  name_prefix        = "dev"
+
   # -------------------------------------------------
   # PUBLIC SUBNETS → EKS
   # -------------------------------------------------
@@ -30,9 +33,6 @@ inputs = {
     { cidr = "10.0.10.0/24", name = "dev-eks-public-az1" },
     { cidr = "10.0.11.0/24", name = "dev-eks-public-az2" },
   ]
-
-  availability_zones = ["us-east-1a", "us-east-1b"]
-  name_prefix        = "dev"
 
   # -------------------------------------------------
   # PRIVATE SUBNETS → EKS NODES / INTERNAL SERVICES
