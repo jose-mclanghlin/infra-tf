@@ -13,15 +13,19 @@ See more: https://terragrunt.gruntwork.io/docs/getting-started/quick-start/
 See more: https://developer.hashicorp.com/terraform/cloud-docs/recommended-practices
 See more: https://terragrunt.gruntwork.io/docs/reference/terragrunt-architecture/
 See more: https://docs.aws.amazon.com/wellarchitected/latest/framework/networking.html
+See more: https://dev.to/aws-builders/enhancing-your-aws-eks-cluster-with-istio-service-mesh-and-kiali-observability-49kk
+See more: https://oneuptime.com/blog/post/2026-02-12-integrate-iam-identity-center-azure-ad/view?utm_source=chatgpt.com
+See more: https://oneuptime.com/blog/post/2026-02-12-set-up-aws-iam-identity-center-sso/view
+See more: https://oneuptime.com/blog/post/2026-02-12-integrate-iam-identity-center-azure-ad/view?utm_source=chatgpt.com
 
 # Steps to deploy infrastructure:
 terragrunt run-all init
 terragrunt run-all plan
 terragrunt run-all apply
 
-Commands to verify:
+# Commands to verify:
 terragrunt run-all output
 terragrunt run-all show
 
-Commands to cleanup:
+# Commands to cleanup:
 terragrunt run-all destroy
