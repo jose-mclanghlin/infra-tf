@@ -18,6 +18,16 @@ See more: https://oneuptime.com/blog/post/2026-02-12-integrate-iam-identity-cent
 See more: https://oneuptime.com/blog/post/2026-02-12-set-up-aws-iam-identity-center-sso/view
 See more: https://oneuptime.com/blog/post/2026-02-12-integrate-iam-identity-center-azure-ad/view?utm_source=chatgpt.com
 
+See more: 
+    AWS ORGANIZATIONS
+    Platform OU
+    └── Identity / Shared Services
+
+    Workloads OU
+    ├── Dev
+    ├── QA
+    └── Prod
+
 # Steps to deploy infrastructure:
 terragrunt run-all init
 terragrunt run-all plan
@@ -29,3 +39,5 @@ terragrunt run-all show
 
 # Commands to cleanup:
 terragrunt run-all destroy
+
+
