@@ -18,6 +18,7 @@ See more: https://oneuptime.com/blog/post/2026-02-12-integrate-iam-identity-cent
 See more: https://oneuptime.com/blog/post/2026-02-12-set-up-aws-iam-identity-center-sso/view
 See more: https://oneuptime.com/blog/post/2026-02-12-integrate-iam-identity-center-azure-ad/view?utm_source=chatgpt.com
 See more: https://www.youtube.com/watch?v=iSCuTJNeN6c (identity center + microsoft entra id)
+See more: https://medium.com/@sanoj.sudo/how-to-create-aws-eks-cluster-step-by-step-a97420ede922
 
 See more: 
     AWS ORGANIZATIONS
